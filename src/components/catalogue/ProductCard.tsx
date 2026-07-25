@@ -1,14 +1,21 @@
-import { ShoppingCart } from 'lucide-react'
+import { BadgeIndianRupee, PackageCheck, ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Product } from '../../types/product'
 import { formatMrp } from '../../utils/formatting'
 import { useCart } from '../../hooks/useCart'
+import { useCatalogue } from '../../hooks/useCatalogue'
 import { ProductImage } from './ProductImage'
 import { QuantitySelector } from './QuantitySelector'
 
 export function ProductCard({ product }: { product: Product }) {
   const { addProduct, items, updateQuantity } = useCart()
+  const { catalogue } = useCatalogue()
   const cartItem = items.find((item) => item.productId === product.id)
+  const relatedProducts = cartItem
+    ? (catalogue?.products ?? [])
+      .filter((item) => item.id !== product.id && item.available && item.composition.trim().toLowerCase() === product.composition.trim().toLowerCase())
+      .slice(0, 12)
+    : []
 
   return (
     <article className="product-card">
@@ -19,14 +26,21 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="product-info">
           <div className="product-title-row">
             <h3><Link to={`/catalogue/${product.id}`}>{product.name}</Link></h3>
-            <span className={product.available ? 'stock-dot success' : 'stock-dot warning'} title={product.available ? 'Available' : 'Unavailable'} aria-label={product.available ? 'Available' : 'Unavailable'} />
+            <span className={product.available ? 'stock-pill success' : 'stock-pill warning'} title={product.available ? 'Available' : 'Unavailable'} aria-label={product.available ? 'Available' : 'Unavailable'}>
+              <PackageCheck size={12} />
+              {product.available ? 'Stock' : 'Hold'}
+            </span>
           </div>
           <p className="product-composition">{product.composition}</p>
-          <p className="product-meta">{product.company} · {product.packing} · MRP {formatMrp(product.mrp)}</p>
+          <div className="product-meta-grid">
+            <span>{product.company}</span>
+            <span>{product.packing}</span>
+            <strong><BadgeIndianRupee size={13} />{formatMrp(product.mrp)}</strong>
+          </div>
         </div>
         <div className="product-card-action">
           {cartItem ? (
-            <QuantitySelector value={cartItem.quantity} onChange={(quantity) => updateQuantity(product.id, quantity)} />
+            <QuantitySelector value={cartItem.quantity} allowZero onChange={(quantity) => updateQuantity(product.id, quantity)} />
           ) : (
             <button className="button primary compact-add" disabled={!product.available} onClick={() => addProduct(product, 1)}>
               <ShoppingCart size={18} />
@@ -35,6 +49,20 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
       </div>
+      {relatedProducts.length > 0 ? (
+        <div className="related-products-row" aria-label={`Similar ${product.composition} products`}>
+          {relatedProducts.map((item) => (
+            <button className="related-product-tile" type="button" key={item.id} onClick={() => addProduct(item, 1)}>
+              <ProductImage src={item.imageUrl} alt="" />
+              <span>
+                <strong>{item.name}</strong>
+                <small>{item.company} · {formatMrp(item.mrp)}</small>
+              </span>
+              <ShoppingCart size={14} />
+            </button>
+          ))}
+        </div>
+      ) : null}
     </article>
   )
 }

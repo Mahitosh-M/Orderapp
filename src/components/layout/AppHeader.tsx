@@ -1,15 +1,17 @@
-import { ClipboardList, ShoppingCart } from 'lucide-react'
+import { ClipboardList, ShoppingCart, Sparkles } from 'lucide-react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { APP_CONFIG } from '../../utils/constants'
 import { useCart } from '../../hooks/useCart'
 import { useCatalogue } from '../../hooks/useCatalogue'
 import { useLaunch } from '../../hooks/useLaunch'
 
-function Logo() {
+function Logo({ label, isStaff }: { label: string; isStaff: boolean }) {
   return (
     <Link className="logo" to="/">
-      <span className="logo-mark">PO</span>
-      <span>{APP_CONFIG.name}</span>
+      <span className="logo-mark">{isStaff ? 'ST' : label.slice(0, 2).toUpperCase()}</span>
+      <span className="logo-copy">
+        <strong>{label}</strong>
+        <small><Sparkles size={12} /> {isStaff ? 'Staff Orders' : 'Catalogue'}</small>
+      </span>
     </Link>
   )
 }
@@ -17,12 +19,13 @@ function Logo() {
 export function AppHeader() {
   const { totalQuantity } = useCart()
   const { offline } = useCatalogue()
-  const { customerName, isStaff } = useLaunch()
+  const { customerName, isStaff, returnUrl } = useLaunch()
   const navigate = useNavigate()
+  const headerName = isStaff ? 'Staff' : customerName || 'Customer'
 
   return (
     <header className="app-header">
-      <Logo />
+      <Logo label={headerName} isStaff={isStaff} />
       <nav className="desktop-nav" aria-label="Primary">
         {isStaff ? (
           <NavLink to="/staff/orders"><ClipboardList size={16} />Orders</NavLink>
@@ -34,16 +37,18 @@ export function AppHeader() {
         )}
       </nav>
       <div className="header-actions">
-        {customerName && <span className="role-pill">{isStaff ? 'Staff' : customerName}</span>}
-        {offline && <span className="offline-pill">Offline</span>}
         {!isStaff && (
-          <>
-            <button title="Cart" aria-label="Cart" className="icon-button cart-icon" onClick={() => navigate('/cart')}>
-              <ShoppingCart size={20} />
-              {totalQuantity > 0 && <span>{totalQuantity}</span>}
-            </button>
-          </>
+          <button title="Cart" aria-label="Cart" className="icon-button cart-icon" onClick={() => navigate('/cart')}>
+            <ShoppingCart size={20} />
+            {totalQuantity > 0 && <span>{totalQuantity}</span>}
+          </button>
         )}
+        {isStaff && (
+          <button type="button" title="Go to CISapp" className="button cis-return-button" onClick={() => window.location.assign(returnUrl)}>
+            <span>CISapp</span>
+          </button>
+        )}
+        {offline && <span className="offline-pill">Offline</span>}
       </div>
     </header>
   )

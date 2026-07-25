@@ -100,6 +100,7 @@ export function StaffOrders() {
               <div className="page-title-row">
                 <div>
                   <h2>{order.customerName}</h2>
+                  {order.customerArea ? <p className="staff-customer-area">{order.customerArea}</p> : null}
                   <p>{order.orderNumber} · {formatDate(order.createdAt)}</p>
                 </div>
                 <span className={`badge ${order.status === 'pending' ? 'warning' : 'success'}`}>{order.status}</span>

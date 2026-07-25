@@ -33,6 +33,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [uid, items])
 
   const updateQuantity = useCallback((productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      setItems((current) => current.filter((item) => item.productId !== productId))
+      return
+    }
     const safeQuantity = Math.max(1, Math.min(MAX_CART_QUANTITY, Math.floor(quantity || 1)))
     setItems((current) => current.map((item) => (item.productId === productId ? { ...item, quantity: safeQuantity } : item)))
   }, [])

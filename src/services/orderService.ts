@@ -32,6 +32,7 @@ export function createOrderPayload(customer: CustomerProfile, items: CartItem[],
     customerCode: customer.customerCode,
     customerName: customer.businessName,
     customerMobile: customer.mobile,
+    customerArea: customer.area ?? '',
     deliveryAddress: customer.address,
     deliveryPreference: draft.deliveryPreference,
     status: 'pending' as OrderStatus,
@@ -53,8 +54,11 @@ export async function submitOrder(customer: CustomerProfile, items: CartItem[], 
 
 export async function getCustomerOrders(uid: string, count = 20) {
   const { db } = getFirebaseServices()
-  const snapshot = await getDocs(query(collection(db, 'orders'), where('customerName', '==', uid), orderBy('createdAt', 'desc'), limit(count)))
-  return snapshot.docs.map((item) => ({ id: item.id, ...item.data() }) as Order)
+  const snapshot = await getDocs(query(collection(db, 'orders'), where('customerId', '==', uid), limit(100)))
+  return snapshot.docs
+    .map((item) => ({ id: item.id, ...item.data() }) as Order)
+    .sort((left, right) => right.createdAt.toMillis() - left.createdAt.toMillis())
+    .slice(0, count)
 }
 
 export async function getRecentOrders(uid: string) {

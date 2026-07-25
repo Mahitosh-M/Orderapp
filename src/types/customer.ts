@@ -8,6 +8,7 @@ export interface CustomerProfile {
   mobile: string
   email: string
   address: string
+  area?: string
   active: boolean
   role: UserRole
   createdAt: string

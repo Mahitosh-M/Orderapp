@@ -28,6 +28,7 @@ export interface Order {
   customerCode: string
   customerName: string
   customerMobile: string
+  customerArea?: string
   deliveryAddress: string
   deliveryPreference: DeliveryPreference
   status: OrderStatus
