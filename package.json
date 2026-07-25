@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "typecheck": "tsc --noEmit",
-    "build": "tsc -b && vite build && node scripts/build-sites-server.mjs",
+    "build": "tsc -b && vite build",
+    "build:sites": "npm run build && node scripts/build-sites-server.mjs",
     "preview": "vite preview",
     "grant-admin": "node scripts/grant-admin.mjs",
     "lint": "eslint .",
