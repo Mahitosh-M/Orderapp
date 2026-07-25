@@ -1,0 +1,38 @@
+# Manual Test Checklist
+
+- Login with valid customer account.
+- Login with invalid credential.
+- Disabled customer account is rejected.
+- Logout clears authenticated session.
+- Home page greeting, catalogue metrics, cart summary, offers link.
+- Catalogue loads sample data.
+- Catalogue search by product, composition, company, category, packing and ID.
+- Company, category, composition and available-only filters.
+- Sorting by name, company and MRP.
+- Product details route.
+- Unavailable product cannot be added.
+- Cart add, increase, decrease, direct quantity edit and remove.
+- Cart persists across refresh.
+- Clear cart confirmation.
+- Checkout customer details and delivery preference.
+- Offline checkout prevention.
+- Order submission succeeds against configured Firebase.
+- Failed order submission keeps cart unchanged.
+- My Orders shows only current customer orders.
+- Order details status, items, notes and address.
+- Reorder flow warning and cart review.
+- Offers page shows only active offers.
+- Profile is read-only and logout works.
+- Customer cannot access `/admin/orders`.
+- Admin can access `/admin/orders` with secure claim and profile role.
+- Admin status/note update.
+- WhatsApp click-to-chat link.
+- Print-friendly admin order view.
+- Offline app shell opens.
+- Cached catalogue remains browsable offline.
+- PWA install prompt on Android Chrome.
+- iPhone Safari Add to Home Screen instructions.
+- Catalogue refresh preserves cache when remote fetch fails.
+- Firestore rules deny customer list access.
+- Firestore rules deny customer status/admin note update.
+- Responsive layouts on narrow mobile, tablet and desktop.

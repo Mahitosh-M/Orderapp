@@ -1,0 +1,52 @@
+{
+  "version": 3,
+  "publishedAt": "2026-07-25T13:20:19.204Z",
+  "productCount": 3,
+  "availableProductCount": 3,
+  "products": [
+    {
+      "id": "PROD-000003",
+      "name": "ARICEF O 200 TAB",
+      "composition": "Cefixime 200mg Tab",
+      "company": "CIPLA",
+      "category": "Antibiotics",
+      "packing": "10 Tab",
+      "mrp": 110,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000002",
+      "name": "CEFIX-200 tab",
+      "composition": "Cefixime 200mg Tab",
+      "company": "CIPLA",
+      "category": "Antibiotics",
+      "packing": "10 Tablets",
+      "mrp": 120,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000001",
+      "name": "Zimtroy 200",
+      "composition": "Cefixime 200mg Tab",
+      "company": "Troikaa",
+      "category": "Antibiotics",
+      "packing": "10 Tablets",
+      "mrp": 120,
+      "imageUrl": "https://res.cloudinary.com/dqmfmbj6t/image/upload/v1784792200/Screenshot_2026-07-23-13-04-56-81_c4b2fae5edd267b2847f1b32e9bc41c3_qdqy7e.jpg",
+      "available": true
+    }
+  ],
+  "companies": [
+    "CIPLA",
+    "Troikaa"
+  ],
+  "categories": [
+    "Antibiotics"
+  ],
+  "compositions": [
+    "Cefixime 200mg Tab",
+    "PARACETAMOL 500"
+  ]
+}

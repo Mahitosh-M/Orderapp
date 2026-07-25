@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    function validCustomerOrderCreate() {
+      return signedIn()
+        && request.resource.data.customerId == request.auth.uid
+        && request.resource.data.status == 'submitted'
+        && request.resource.data.adminNote == ''
+        && request.resource.data.items is list
+        && request.resource.data.totalProducts > 0
+        && request.resource.data.totalQuantity > 0;
+    }
+
+    match /customers/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if false;
+      allow create, update, delete: if false;
+    }
+
+    match /orders/{orderId} {
+      allow get: if signedIn() && (resource.data.customerId == request.auth.uid || isAdmin());
+      allow list: if isAdmin();
+      allow create: if validCustomerOrderCreate();
+      allow update: if isAdmin()
+        && !('customerId' in request.resource.data.diff(resource.data).affectedKeys())
+        && !('items' in request.resource.data.diff(resource.data).affectedKeys());
+      allow delete: if false;
+    }
+  }
+}

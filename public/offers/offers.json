@@ -1,0 +1,17 @@
+[
+  {
+    "id": "offer-1",
+    "title": "Monthly Scheme Updates",
+    "description": "Ask the supplier about current quantity-based schemes during order confirmation.",
+    "imageUrl": "https://placehold.co/600x340/0b1f3a/d4a017?text=Offers",
+    "active": true,
+    "validUntil": "2026-08-31"
+  },
+  {
+    "id": "offer-2",
+    "title": "Seasonal Availability Alert",
+    "description": "High-demand cough care and vitamin items may be confirmed subject to stock.",
+    "imageUrl": "https://placehold.co/600x340/e6ebf1/0b1f3a?text=Stock",
+    "active": true
+  }
+]
