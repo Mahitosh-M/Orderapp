@@ -34,7 +34,7 @@ Firestore collections:
 - `customers/{uid}`: active customer/admin profiles.
 - `orders/{orderId}`: one submitted order document containing a snapshot of public product fields and quantities.
 
-The login page has been removed. The app now expects launch parameters from CISapp for the customer name and role.
+The login page has been removed. The app now expects launch parameters from CISapp for the customer or staff name and role.
 
 Admin access in the UI comes from the CISapp launch role, but production Firestore rules still require a secure Firebase Auth custom claim for protected order reads: `request.auth.token.admin == true`. A URL parameter is only for routing the UI and must not be treated as secure authorization for Firestore data.
 
@@ -43,14 +43,16 @@ Admin access in the UI comes from the CISapp launch role, but production Firesto
 Ordering App is intended to be opened from `https://cisapp-236ab.web.app/` with two query parameters:
 
 ```text
-https://orderapp-35200.web.app/?uid=FIREBASE_UID&customerId=CUSTOMER_CODE
+https://orderapp-35200.web.app/?name=CUSTOMER_OR_STAFF_NAME&role=customer
+https://orderapp-35200.web.app/?name=STAFF_NAME&role=staff
 ```
 
-The app loads `customers/{uid}` from Firestore, verifies `customerId` against the profile `customerCode` or `uid`, then uses `businessName` and `role` from that profile.
+The app accepts `name`, `customerName`, or `userName` for the display name. The `role` value must be `customer` or `staff`.
+
+Launches with parameters are accepted only when the browser referrer is `cisapp-236ab.web.app`. After a valid launch, the session is stored in `sessionStorage` so in-app navigation and refreshes continue without repeating the launch parameters.
 
 - `customer` opens the mobile-first ordering experience and uses `customerName` in the customer UI.
-- `admin` opens `/admin/orders` and only exposes order-management navigation.
-- Launches with parameters are accepted only when the browser referrer is `cisapp-236ab.web.app`.
+- `staff` opens `/staff/orders` and only exposes order-management navigation.
 
 ## Catalogue
 

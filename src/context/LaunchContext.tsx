@@ -27,8 +27,6 @@ interface LaunchContextValue {
 export const LaunchContext = createContext<LaunchContextValue | undefined>(undefined)
 
 const storageKey = 'partner-order-launch-session'
-const allowedOpenerHost = 'cisapp-236ab.web.app'
-
 function parseRole(value: string | null): LaunchRole | null {
   const normalized = value?.trim().toLowerCase()
   if (normalized === 'customer' || normalized === 'staff') return normalized
@@ -70,15 +68,6 @@ function createLaunchProfile(name: string, role: LaunchRole): CustomerProfile {
   }
 }
 
-function launchedFromAllowedHost() {
-  if (!document.referrer) return false
-  try {
-    return new URL(document.referrer).host === allowedOpenerHost
-  } catch {
-    return false
-  }
-}
-
 export function LaunchProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<LaunchSession | null>(() => loadStoredSession())
   const [loading, setLoading] = useState(false)
@@ -90,11 +79,6 @@ export function LaunchProvider({ children }: { children: ReactNode }) {
     const role = parseRole(params.get('role'))
 
     if (!name && !role) return
-
-    if (!launchedFromAllowedHost()) {
-      setError('Open this app from CISapp.')
-      return
-    }
 
     if (!name || !role) {
       setError('Missing name or role launch parameter.')

@@ -19,7 +19,7 @@ export function Checkout() {
   const [orderId, setOrderId] = useState<string | null>(null)
   if (items.length === 0 && !orderId) return <Navigate to="/cart" replace />
   async function placeOrder() {
-    if (!customer) return setError('Open this app from CISapp before submitting an order.')
+    if (!customer) return setError('Customer name is required before submitting an order.')
     if (offline) return setError('You are offline. Your cart is saved, but orders can only be submitted when internet is available.')
     setSubmitting(true)
     setError(null)
