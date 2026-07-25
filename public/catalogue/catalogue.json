@@ -1,8 +1,8 @@
 {
-  "version": 8,
-  "publishedAt": "2026-07-25T14:35:06.478Z",
-  "productCount": 4,
-  "availableProductCount": 4,
+  "version": 9,
+  "publishedAt": "2026-07-25T19:07:29.456Z",
+  "productCount": 5,
+  "availableProductCount": 5,
   "products": [
     {
       "id": "PROD-000004",
@@ -38,6 +38,17 @@
       "available": true
     },
     {
+      "id": "PROD-000005",
+      "name": "DOLO-650 TAB",
+      "composition": "PARACETAMOL 650 TAB",
+      "company": "MICRO",
+      "category": "FEVER",
+      "packing": "15 TAB",
+      "mrp": 31.99,
+      "imageUrl": "",
+      "available": true
+    },
+    {
       "id": "PROD-000001",
       "name": "Zimtroy 200",
       "composition": "Cefixime 200mg Tab",
@@ -52,14 +63,16 @@
   "companies": [
     "ALKEM",
     "CIPLA",
+    "MICRO",
     "Troikaa"
   ],
   "categories": [
-    "Antibiotics"
+    "Antibiotics",
+    "FEVER"
   ],
   "compositions": [
     "Amoxicilin 625mg",
     "Cefixime 200mg Tab",
-    "PARACETAMOL 500"
+    "PARACETAMOL 650 TAB"
   ]
 }

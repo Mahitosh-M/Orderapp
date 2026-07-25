@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Clock3, PackageCheck, RotateCcw, ShoppingBag, Truck } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import type { Order } from '../types/order'
 import { getOrder } from '../services/orderService'
@@ -44,9 +45,50 @@ export function OrderDetails() {
   return (
     <section className="page-stack">
       <Link className="text-link" to="/orders">Back to orders</Link>
-      <article className="form-panel print-area">
-        <h1>{order.orderNumber}</h1>
-        <p>Status: <strong>{order.status}</strong></p>
+      <article className="form-panel order-detail-card print-area">
+        <div className="order-detail-head">
+          <span className="my-order-icon"><ShoppingBag size={20} /></span>
+          <div>
+            <h1>{order.orderNumber}</h1>
+            <p><Clock3 size={13} />{formatDate(order.createdAt)}</p>
+          </div>
+        </div>
+        <div className="order-detail-meta">
+          <span><PackageCheck size={13} />{order.status}</span>
+          <span><Truck size={13} />{deliveryLabel(order.deliveryPreference)}</span>
+          <span>Updated {formatDate(order.updatedAt)}</span>
+        </div>
+        <p className="order-address">{order.deliveryAddress}</p>
+        <div className="timeline">{['pending', 'confirmed'].map((status) => <span className={status === order.status ? 'active' : ''} key={status}>{status}</span>)}</div>
+        {reorderMessage && <p className="rate-note">{reorderMessage}</p>}
+        <button className="button primary" onClick={reorder}><RotateCcw size={16} />Reorder to cart</button>
+        <h2>Items</h2>
+        <div className="order-detail-items">
+          {order.items.map((item) => <div className="line-item order-detail-item" key={item.productId}><span>{item.productName}<small>{item.company} · {item.packing}</small></span><strong>{item.quantity}</strong></div>)}
+        </div>
+        {order.customerNote && <p className="order-note"><strong>Customer note:</strong> {order.customerNote}</p>}
+        {order.adminNote && <p className="order-note"><strong>Supplier note:</strong> {order.adminNote}</p>}
+      </article>
+    </section>
+  )
+
+  /*
+  return (
+    <section className="page-stack">
+      <Link className="text-link" to="/orders">Back to orders</Link>
+      <article className="form-panel order-detail-card print-area">
+        <div className="order-detail-head">
+          <span className="my-order-icon"><ShoppingBag size={20} /></span>
+          <div>
+            <h1>{order.orderNumber}</h1>
+            <p><Clock3 size={13} />{formatDate(order.createdAt)}</p>
+          </div>
+        </div>
+        <div className="order-detail-meta">
+          <span><PackageCheck size={13} />{order.status}</span>
+          <span><Truck size={13} />{deliveryLabel(order.deliveryPreference)}</span>
+          <span>Updated {formatDate(order.updatedAt)}</span>
+        </div>
         <p>{formatDate(order.createdAt)} · Updated {formatDate(order.updatedAt)}</p>
         <p>{deliveryLabel(order.deliveryPreference)} · {order.deliveryAddress}</p>
         <div className="timeline">{['pending', 'confirmed'].map((status) => <span className={status === order.status ? 'active' : ''} key={status}>{status}</span>)}</div>
@@ -59,4 +101,5 @@ export function OrderDetails() {
       </article>
     </section>
   )
+  */
 }
