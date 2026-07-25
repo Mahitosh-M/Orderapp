@@ -28,8 +28,7 @@ export function AppHeader() {
           <NavLink to="/admin/orders"><ClipboardList size={16} />Orders</NavLink>
         ) : (
           <>
-            <NavLink to="/" end>Home</NavLink>
-            <NavLink to="/catalogue">Catalogue</NavLink>
+            <NavLink to="/" end>Catalogue</NavLink>
             <NavLink to="/offers">Offers</NavLink>
             <NavLink to="/orders">Orders</NavLink>
           </>

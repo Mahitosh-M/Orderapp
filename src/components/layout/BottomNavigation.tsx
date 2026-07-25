@@ -1,11 +1,10 @@
-import { Gift, Home, ListOrdered, PackageSearch, ShoppingCart, User, ShieldCheck } from 'lucide-react'
+import { Gift, ListOrdered, PackageSearch, ShoppingCart, User, ShieldCheck } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useCart } from '../../hooks/useCart'
 import { useLaunch } from '../../hooks/useLaunch'
 
 const items = [
-  { to: '/', label: 'Home', icon: Home },
-  { to: '/catalogue', label: 'Catalogue', icon: PackageSearch },
+  { to: '/', label: 'Catalogue', icon: PackageSearch },
   { to: '/offers', label: 'Offers', icon: Gift },
   { to: '/orders', label: 'Orders', icon: ListOrdered },
   { to: '/profile', label: 'Profile', icon: User },

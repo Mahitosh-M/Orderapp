@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CustomerLayout } from './components/layout/CustomerLayout'
-import { Home } from './pages/Home'
 import { Catalogue } from './pages/Catalogue'
 import { ProductDetails } from './pages/ProductDetails'
 import { Cart } from './pages/Cart'
@@ -34,7 +33,7 @@ export function App() {
           </>
         ) : (
           <>
-            <Route index element={<Home />} />
+            <Route index element={<Catalogue />} />
             <Route path="catalogue" element={<Catalogue />} />
             <Route path="catalogue/:id" element={<ProductDetails />} />
             <Route path="cart" element={<Cart />} />

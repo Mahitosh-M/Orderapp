@@ -18,20 +18,15 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="product-copy">
         <div className="product-title-row">
           <h3><Link to={`/catalogue/${product.id}`}>{product.name}</Link></h3>
-          <span className={product.available ? 'badge success' : 'badge warning'}>{product.available ? 'Available' : 'Unavailable'}</span>
+          <span className={product.available ? 'stock-dot success' : 'stock-dot warning'} title={product.available ? 'Available' : 'Unavailable'} aria-label={product.available ? 'Available' : 'Unavailable'} />
         </div>
-        <p>{product.composition}</p>
-        <dl>
-          <div><dt>Company</dt><dd>{product.company}</dd></div>
-          <div><dt>Packing</dt><dd>{product.packing}</dd></div>
-          <div><dt>MRP</dt><dd>{formatMrp(product.mrp)}</dd></div>
-        </dl>
-        <p className="rate-note">Final rate and availability will be confirmed by the supplier.</p>
+        <p className="product-composition">{product.composition}</p>
+        <p className="product-meta">{product.company} · {product.packing} · MRP {formatMrp(product.mrp)}</p>
         <div className="card-actions">
           <QuantitySelector value={quantity} onChange={setQuantity} />
-          <button className="button primary" disabled={!product.available} onClick={() => addProduct(product, quantity)}>
+          <button className="button primary compact-add" disabled={!product.available} onClick={() => addProduct(product, quantity)}>
             <ShoppingCart size={18} />
-            Add to Cart
+            Add
           </button>
         </div>
       </div>

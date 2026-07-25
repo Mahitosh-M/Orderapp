@@ -9,7 +9,7 @@ import { filterAndSortProducts } from '../utils/search'
 import { formatDate } from '../utils/formatting'
 import type { ProductQuery } from '../types/catalogue'
 
-const defaultQuery: ProductQuery = { search: '', company: '', category: '', composition: '', availableOnly: false, sort: 'name-asc', pageSize: 20 }
+const defaultQuery: ProductQuery = { search: '', company: '', category: '', composition: '', availableOnly: false, sort: 'name-asc', pageSize: 80 }
 
 export function Catalogue() {
   const { catalogue, loading, error, fromCache, offline } = useCatalogue()
@@ -23,7 +23,7 @@ export function Catalogue() {
   if (!catalogue) return <ErrorState message={error ?? 'Catalogue unavailable.'} />
   return (
     <section className="page-stack">
-      <div className="page-title-row">
+      <div className="page-title-row catalogue-title-row">
         <div>
           <h1>Catalogue</h1>
           <p>{products.length} results · Version {catalogue.version} · Updated {formatDate(catalogue.publishedAt)} {fromCache ? '· Cached' : ''}</p>
