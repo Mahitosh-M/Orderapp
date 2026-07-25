@@ -1,17 +1,13 @@
-import { Gift, ListOrdered, PackageSearch, ShoppingCart, User, ShieldCheck } from 'lucide-react'
+import { ListOrdered, PackageSearch, ShieldCheck } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
-import { useCart } from '../../hooks/useCart'
 import { useLaunch } from '../../hooks/useLaunch'
 
 const items = [
   { to: '/', label: 'Catalogue', icon: PackageSearch },
-  { to: '/offers', label: 'Offers', icon: Gift },
   { to: '/orders', label: 'Orders', icon: ListOrdered },
-  { to: '/profile', label: 'Profile', icon: User },
 ]
 
 export function BottomNavigation() {
-  const { totalQuantity } = useCart()
   const { isAdmin } = useLaunch()
 
   if (isAdmin) {
@@ -33,10 +29,6 @@ export function BottomNavigation() {
           <span>{label}</span>
         </NavLink>
       ))}
-      <NavLink to="/cart" className="cart-fab" aria-label={`Cart with ${totalQuantity} items`}>
-        <ShoppingCart size={22} />
-        {totalQuantity > 0 && <strong>{totalQuantity}</strong>}
-      </NavLink>
     </nav>
   )
 }

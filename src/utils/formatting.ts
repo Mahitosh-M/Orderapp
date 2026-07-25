@@ -15,7 +15,7 @@ export function formatDate(value?: string | Date | Timestamp) {
 }
 
 export function deliveryLabel(value: string) {
-  if (value === 'urgent') return 'Urgent'
-  if (value === 'pickup') return 'Customer pickup'
-  return 'Normal delivery'
+  if (value === 'home') return 'HOME'
+  if (value === 'shop') return 'SHOP'
+  return 'BUS'
 }

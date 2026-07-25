@@ -24,7 +24,6 @@ export function ProductDetails() {
         <h1>{product.name}</h1>
         <p>{product.composition}</p>
         <dl className="details-grid">
-          <div><dt>Product ID</dt><dd>{product.id}</dd></div>
           <div><dt>Company</dt><dd>{product.company}</dd></div>
           <div><dt>Category</dt><dd>{product.category}</dd></div>
           <div><dt>Packing</dt><dd>{product.packing}</dd></div>

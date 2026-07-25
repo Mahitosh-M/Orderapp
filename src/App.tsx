@@ -6,8 +6,6 @@ import { Cart } from './pages/Cart'
 import { Checkout } from './pages/Checkout'
 import { MyOrders } from './pages/MyOrders'
 import { OrderDetails } from './pages/OrderDetails'
-import { Offers } from './pages/Offers'
-import { Profile } from './pages/Profile'
 import { InstallApp } from './pages/InstallApp'
 import { NotFound } from './pages/NotFound'
 import { AdminOrders } from './pages/admin/AdminOrders'
@@ -40,9 +38,9 @@ export function App() {
             <Route path="checkout" element={<Checkout />} />
             <Route path="orders" element={<MyOrders />} />
             <Route path="orders/:id" element={<OrderDetails />} />
-            <Route path="offers" element={<Offers />} />
-            <Route path="profile" element={<Profile />} />
             <Route path="install" element={<InstallApp />} />
+            <Route path="offers" element={<Navigate to="/" replace />} />
+            <Route path="profile" element={<Navigate to="/" replace />} />
             <Route path="admin/*" element={<Navigate to="/" replace />} />
           </>
         )}

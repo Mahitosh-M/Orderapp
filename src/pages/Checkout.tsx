@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { Navigate, Link } from 'react-router-dom'
 import { Send } from 'lucide-react'
-import { CartSummary } from '../components/cart/CartSummary'
-import { ConfirmDialog } from '../components/common/ConfirmDialog'
 import { ErrorState } from '../components/common/ErrorState'
 import { useCart } from '../hooks/useCart'
 import { useCatalogue } from '../hooks/useCatalogue'
@@ -14,9 +12,8 @@ export function Checkout() {
   const { profile: customer } = useLaunch()
   const { items, clearCart } = useCart()
   const { offline } = useCatalogue()
-  const [deliveryPreference, setDeliveryPreference] = useState<DeliveryPreference>('normal')
+  const [deliveryPreference, setDeliveryPreference] = useState<DeliveryPreference>('bus')
   const [customerNote, setCustomerNote] = useState('')
-  const [confirm, setConfirm] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [orderId, setOrderId] = useState<string | null>(null)
@@ -34,30 +31,22 @@ export function Checkout() {
       setError(nextError instanceof Error ? nextError.message : 'Order submission failed. Your cart is unchanged.')
     } finally {
       setSubmitting(false)
-      setConfirm(false)
     }
   }
   if (orderId) {
     return <section className="success-panel"><h1>Order submitted</h1><p>Your order was submitted successfully.</p><Link className="button primary" to={`/orders/${orderId}`}>View Order</Link><Link className="button secondary" to="/catalogue">Continue Shopping</Link></section>
   }
   return (
-    <section className="page-stack two-column">
+    <section className="page-stack">
       <div className="form-panel">
         <h1>Checkout</h1>
         {offline && <ErrorState message="You are offline. Your cart is saved, but orders can only be submitted when internet is available." />}
         {error && <ErrorState message={error} />}
-        <dl className="details-grid">
-          <div><dt>Business</dt><dd>{customer?.businessName ?? 'Open from CISapp'}</dd></div>
-          <div><dt>Delivery address</dt><dd>{customer?.address ?? 'Not available'}</dd></div>
-          <div><dt>Mobile</dt><dd>{customer?.mobile ?? 'Not available'}</dd></div>
-        </dl>
-        <label>Delivery preference<select value={deliveryPreference} onChange={(event) => setDeliveryPreference(event.target.value as DeliveryPreference)}><option value="normal">Normal delivery</option><option value="urgent">Urgent</option><option value="pickup">Customer pickup</option></select></label>
+        <label>Delivery preference<select value={deliveryPreference} onChange={(event) => setDeliveryPreference(event.target.value as DeliveryPreference)}><option value="bus">BUS</option><option value="home">HOME</option><option value="shop">SHOP</option></select></label>
         <label>Order note<textarea value={customerNote} maxLength={500} onChange={(event) => setCustomerNote(event.target.value)} /></label>
         <p className="rate-note">Final rates, stock availability, schemes and delivery time will be confirmed by the supplier.</p>
-        <button className="button primary" disabled={submitting || offline || !customer} onClick={() => setConfirm(true)}><Send size={18} />Submit order</button>
+        <button className="button primary" disabled={submitting || offline || !customer} onClick={() => void placeOrder()}><Send size={18} />{submitting ? 'Submitting...' : 'Submit order'}</button>
       </div>
-      <CartSummary />
-      <ConfirmDialog open={confirm} title="Submit order?" message="Please confirm quantities and delivery details before submission." confirmLabel={submitting ? 'Submitting...' : 'Submit'} onCancel={() => setConfirm(false)} onConfirm={() => void placeOrder()} />
     </section>
   )
 }

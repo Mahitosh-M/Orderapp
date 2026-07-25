@@ -21,7 +21,7 @@ const item: CartItem = { productId: 'P1', productName: 'Public Product', composi
 
 describe('order payload creation', () => {
   it('creates a customer-owned submitted order snapshot without selling price fields', () => {
-    const payload = createOrderPayload(customer, [item], { deliveryPreference: 'normal', customerNote: 'Please send tomorrow' })
+    const payload = createOrderPayload(customer, [item], { deliveryPreference: 'bus', customerNote: 'Please send tomorrow' })
     expect(payload.customerId).toBe('u1')
     expect(payload.status).toBe('submitted')
     expect(payload.totalProducts).toBe(1)
@@ -30,6 +30,6 @@ describe('order payload creation', () => {
   })
 
   it('prevents offline/empty style invalid payloads by rejecting empty cart', () => {
-    expect(() => createOrderPayload(customer, [], { deliveryPreference: 'normal', customerNote: '' })).toThrow('cart is empty')
+    expect(() => createOrderPayload(customer, [], { deliveryPreference: 'bus', customerNote: '' })).toThrow('cart is empty')
   })
 })

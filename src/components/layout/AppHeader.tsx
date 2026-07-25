@@ -29,7 +29,6 @@ export function AppHeader() {
         ) : (
           <>
             <NavLink to="/" end>Catalogue</NavLink>
-            <NavLink to="/offers">Offers</NavLink>
             <NavLink to="/orders">Orders</NavLink>
           </>
         )}

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Product } from '../../types/product'
@@ -8,8 +7,9 @@ import { ProductImage } from './ProductImage'
 import { QuantitySelector } from './QuantitySelector'
 
 export function ProductCard({ product }: { product: Product }) {
-  const [quantity, setQuantity] = useState(1)
-  const { addProduct } = useCart()
+  const { addProduct, items, updateQuantity } = useCart()
+  const cartItem = items.find((item) => item.productId === product.id)
+
   return (
     <article className="product-card">
       <Link to={`/catalogue/${product.id}`} className="product-link">
@@ -22,13 +22,14 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         <p className="product-composition">{product.composition}</p>
         <p className="product-meta">{product.company} · {product.packing} · MRP {formatMrp(product.mrp)}</p>
-        <div className="card-actions">
-          <QuantitySelector value={quantity} onChange={setQuantity} />
-          <button className="button primary compact-add" disabled={!product.available} onClick={() => addProduct(product, quantity)}>
+        {cartItem ? (
+          <QuantitySelector value={cartItem.quantity} onChange={(quantity) => updateQuantity(product.id, quantity)} />
+        ) : (
+          <button className="button primary compact-add" disabled={!product.available} onClick={() => addProduct(product, 1)}>
             <ShoppingCart size={18} />
             Add
           </button>
-        </div>
+        )}
       </div>
     </article>
   )

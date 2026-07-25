@@ -14,7 +14,7 @@ export interface CartItem {
 
 export type OrderItem = CartItem
 
-export type DeliveryPreference = 'normal' | 'urgent' | 'pickup'
+export type DeliveryPreference = 'bus' | 'home' | 'shop'
 
 export type OrderStatus =
   | 'submitted'
