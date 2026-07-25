@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ClipboardList, Download, PackageSearch, ShieldCheck, ShoppingCart, Sparkles } from 'lucide-react'
+import { ClipboardList, Download, PackageSearch, ShoppingCart, Sparkles } from 'lucide-react'
 import { useCatalogue } from '../hooks/useCatalogue'
 import { useCart } from '../hooks/useCart'
 import { useLaunch } from '../hooks/useLaunch'
@@ -21,7 +21,6 @@ export function Home() {
         </div>
         <div className="hero-actions">
           <Link className="button primary" to="/catalogue"><PackageSearch size={18} />Browse Catalogue</Link>
-          <Link className="button ghost" to="/admin/orders"><ShieldCheck size={18} />Admin</Link>
         </div>
       </div>
 
