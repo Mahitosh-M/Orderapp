@@ -10,8 +10,7 @@ service cloud.firestore {
     }
 
     function validCustomerOrderCreate() {
-      return signedIn()
-        && request.resource.data.customerId == request.auth.uid
+      return request.resource.data.customerId is string
         && request.resource.data.status == 'submitted'
         && request.resource.data.adminNote == ''
         && request.resource.data.items is list
@@ -20,7 +19,7 @@ service cloud.firestore {
     }
 
     match /customers/{uid} {
-      allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow get: if true;
       allow list: if false;
       allow create, update, delete: if false;
     }

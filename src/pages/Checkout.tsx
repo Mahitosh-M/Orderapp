@@ -45,7 +45,7 @@ export function Checkout() {
         <label>Delivery preference<select value={deliveryPreference} onChange={(event) => setDeliveryPreference(event.target.value as DeliveryPreference)}><option value="bus">BUS</option><option value="home">HOME</option><option value="shop">SHOP</option></select></label>
         <label>Order note<textarea value={customerNote} maxLength={500} onChange={(event) => setCustomerNote(event.target.value)} /></label>
         <p className="rate-note">Final rates, stock availability, schemes and delivery time will be confirmed by the supplier.</p>
-        <button className="button primary" disabled={submitting || offline || !customer} onClick={() => void placeOrder()}><Send size={18} />{submitting ? 'Submitting...' : 'Submit order'}</button>
+        <button className="button primary" disabled={submitting || offline} onClick={() => void placeOrder()}><Send size={18} />{submitting ? 'Submitting...' : 'Submit order'}</button>
       </div>
     </section>
   )
