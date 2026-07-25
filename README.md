@@ -62,6 +62,16 @@ firebase use --add
 firebase deploy
 ```
 
+GitHub deployment is configured from branch `main`. On every push or merge to `main`, GitHub Actions runs checks, builds the Vite app, and deploys `dist` to Firebase Hosting.
+
+Required GitHub secret:
+
+```text
+FIREBASE_SERVICE_ACCOUNT_ORDERAPP_35200
+```
+
+The secret value must be the full JSON service-account key for Firebase project `orderapp-35200`.
+
 ## PWA
 
 The app includes a manifest, service worker, install guidance, standalone display mode, theme colors, offline shell caching, and static catalogue/offers caching. Customer order data is not cached globally by the service worker.
