@@ -1,18 +1,7 @@
-import { LogOut } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { useLaunch } from '../hooks/useLaunch'
 
 export function Profile() {
-  const { customer, logout } = useAuth()
-  const navigate = useNavigate()
-
-  async function handleLogout() {
-    try {
-      await logout()
-    } finally {
-      navigate('/login', { replace: true })
-    }
-  }
+  const { profile: customer } = useLaunch()
 
   return (
     <section className="form-panel">
@@ -27,7 +16,6 @@ export function Profile() {
         <div><dt>Status</dt><dd>{customer?.active ? 'Active' : 'Not configured'}</dd></div>
       </dl>
       <p className="muted">Contact the supplier for account-detail changes.</p>
-      <button className="button secondary" onClick={() => void handleLogout()}><LogOut size={18} />Logout</button>
     </section>
   )
 }

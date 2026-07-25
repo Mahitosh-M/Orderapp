@@ -5,7 +5,7 @@ import { CartProvider } from './CartContext'
 import { useCart } from '../hooks/useCart'
 import type { Product } from '../types/product'
 
-vi.mock('../hooks/useAuth', () => ({ useAuth: () => ({ user: { uid: 'test-user' } }) }))
+vi.mock('../hooks/useLaunch', () => ({ useLaunch: () => ({ uid: 'test-user' }) }))
 vi.mock('../services/cacheService', () => ({
   getCart: vi.fn(async () => []),
   saveCart: vi.fn(async () => undefined),

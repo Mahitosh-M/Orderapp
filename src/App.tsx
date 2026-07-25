@@ -14,9 +14,12 @@ import { NotFound } from './pages/NotFound'
 import { AdminOrders } from './pages/admin/AdminOrders'
 import { AdminOrderDetails } from './pages/admin/AdminOrderDetails'
 import { useLaunch } from './hooks/useLaunch'
+import { LoadingState } from './components/common/LoadingState'
 
 export function App() {
-  const { isAdmin } = useLaunch()
+  const { isAdmin, loading } = useLaunch()
+
+  if (loading) return <LoadingState label="Loading customer" />
 
   return (
     <Routes>

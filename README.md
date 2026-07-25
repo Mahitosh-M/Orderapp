@@ -43,11 +43,10 @@ Admin access in the UI comes from the CISapp launch role, but production Firesto
 Ordering App is intended to be opened from `https://cisapp-236ab.web.app/` with two query parameters:
 
 ```text
-https://orderapp-35200.web.app/?customerName=Customer%20Name&role=customer
-https://orderapp-35200.web.app/?customerName=Admin%20Name&role=admin
+https://orderapp-35200.web.app/?uid=FIREBASE_UID&customerId=CUSTOMER_CODE
 ```
 
-Supported roles are `customer` and `admin`.
+The app loads `customers/{uid}` from Firestore, verifies `customerId` against the profile `customerCode` or `uid`, then uses `businessName` and `role` from that profile.
 
 - `customer` opens the mobile-first ordering experience and uses `customerName` in the customer UI.
 - `admin` opens `/admin/orders` and only exposes order-management navigation.

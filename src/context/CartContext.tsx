@@ -3,6 +3,7 @@ import type { Product } from '../types/product'
 import type { CartItem } from '../types/order'
 import { clearCart as clearCachedCart, getCart, saveCart } from '../services/cacheService'
 import { MAX_CART_QUANTITY } from '../utils/constants'
+import { useLaunch } from '../hooks/useLaunch'
 
 interface CartContextValue {
   items: CartItem[]
@@ -19,7 +20,8 @@ export const CartContext = createContext<CartContextValue | undefined>(undefined
 const guestKey = 'guest'
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const uid = guestKey
+  const { uid: launchUid } = useLaunch()
+  const uid = launchUid || guestKey
   const [items, setItems] = useState<CartItem[]>([])
 
   useEffect(() => {

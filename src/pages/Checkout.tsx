@@ -4,14 +4,14 @@ import { Send } from 'lucide-react'
 import { CartSummary } from '../components/cart/CartSummary'
 import { ConfirmDialog } from '../components/common/ConfirmDialog'
 import { ErrorState } from '../components/common/ErrorState'
-import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { useCatalogue } from '../hooks/useCatalogue'
+import { useLaunch } from '../hooks/useLaunch'
 import type { DeliveryPreference } from '../types/order'
 import { submitOrder } from '../services/orderService'
 
 export function Checkout() {
-  const { customer } = useAuth()
+  const { profile: customer } = useLaunch()
   const { items, clearCart } = useCart()
   const { offline } = useCatalogue()
   const [deliveryPreference, setDeliveryPreference] = useState<DeliveryPreference>('normal')
@@ -22,7 +22,7 @@ export function Checkout() {
   const [orderId, setOrderId] = useState<string | null>(null)
   if (items.length === 0 && !orderId) return <Navigate to="/cart" replace />
   async function placeOrder() {
-    if (!customer) return setError('Please sign in before submitting an order.')
+    if (!customer) return setError('Open this app from CISapp before submitting an order.')
     if (offline) return setError('You are offline. Your cart is saved, but orders can only be submitted when internet is available.')
     setSubmitting(true)
     setError(null)
@@ -47,7 +47,7 @@ export function Checkout() {
         {offline && <ErrorState message="You are offline. Your cart is saved, but orders can only be submitted when internet is available." />}
         {error && <ErrorState message={error} />}
         <dl className="details-grid">
-          <div><dt>Business</dt><dd>{customer?.businessName ?? 'Sign in required'}</dd></div>
+          <div><dt>Business</dt><dd>{customer?.businessName ?? 'Open from CISapp'}</dd></div>
           <div><dt>Delivery address</dt><dd>{customer?.address ?? 'Not available'}</dd></div>
           <div><dt>Mobile</dt><dd>{customer?.mobile ?? 'Not available'}</dd></div>
         </dl>
