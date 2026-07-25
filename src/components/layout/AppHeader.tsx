@@ -1,4 +1,4 @@
-import { ClipboardList, RefreshCw, ShoppingCart } from 'lucide-react'
+import { ClipboardList, ShoppingCart } from 'lucide-react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { APP_CONFIG } from '../../utils/constants'
 import { useCart } from '../../hooks/useCart'
@@ -16,7 +16,7 @@ function Logo() {
 
 export function AppHeader() {
   const { totalQuantity } = useCart()
-  const { refresh, refreshing, offline } = useCatalogue()
+  const { offline } = useCatalogue()
   const { customerName, isAdmin } = useLaunch()
   const navigate = useNavigate()
 
@@ -40,9 +40,6 @@ export function AppHeader() {
         {offline && <span className="offline-pill">Offline</span>}
         {!isAdmin && (
           <>
-            <button title="Refresh catalogue" aria-label="Refresh catalogue" className="icon-button" disabled={refreshing} onClick={() => void refresh()}>
-              <RefreshCw size={19} />
-            </button>
             <button title="Cart" aria-label="Cart" className="icon-button cart-icon" onClick={() => navigate('/cart')}>
               <ShoppingCart size={20} />
               {totalQuantity > 0 && <span>{totalQuantity}</span>}

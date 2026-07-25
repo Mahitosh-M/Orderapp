@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { RefreshCw } from 'lucide-react'
 import { ErrorState } from '../components/common/ErrorState'
 import { LoadingState } from '../components/common/LoadingState'
 import { ProductFilters } from '../components/catalogue/ProductFilters'
@@ -13,7 +12,7 @@ import type { ProductQuery } from '../types/catalogue'
 const defaultQuery: ProductQuery = { search: '', company: '', category: '', composition: '', availableOnly: false, sort: 'name-asc', pageSize: 20 }
 
 export function Catalogue() {
-  const { catalogue, loading, error, fromCache, offline, refreshing, refresh } = useCatalogue()
+  const { catalogue, loading, error, fromCache, offline } = useCatalogue()
   const [query, setQuery] = useState(defaultQuery)
   const [page, setPage] = useState(1)
   const debouncedSearch = useDebounce(query.search)
@@ -29,7 +28,6 @@ export function Catalogue() {
           <h1>Catalogue</h1>
           <p>{products.length} results · Version {catalogue.version} · Updated {formatDate(catalogue.publishedAt)} {fromCache ? '· Cached' : ''}</p>
         </div>
-        <button className="button secondary" disabled={refreshing} onClick={() => void refresh()}><RefreshCw size={17} />Refresh</button>
       </div>
       {offline && <ErrorState message="You are offline. Cached catalogue remains available." />}
       {error && <ErrorState message={error} />}
