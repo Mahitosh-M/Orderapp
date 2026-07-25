@@ -37,7 +37,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Check Firebase service account secret
+      - name: Prepare Firebase credentials
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ORDERAPP_35200 }}
         run: |
@@ -45,11 +45,10 @@ jobs:
             echo "Missing GitHub secret FIREBASE_SERVICE_ACCOUNT_ORDERAPP_35200"
             exit 1
           fi
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
+          node -e "const fs=require('fs'); const p=process.env.RUNNER_TEMP + '/firebase-service-account.json'; const data=JSON.parse(fs.readFileSync(p,'utf8')); if (data.project_id !== 'orderapp-35200') throw new Error('Service account project_id must be orderapp-35200'); for (const key of ['client_email','private_key']) if (!data[key]) throw new Error('Service account JSON missing ' + key); console.log('Firebase service account:', data.client_email);"
 
       - name: Deploy to Firebase Hosting
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ORDERAPP_35200 }}
         run: |
-          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/firebase-service-account.json"
-          npx firebase-tools@latest deploy --only hosting --project orderapp-35200 --non-interactive
+          npx firebase-tools@latest deploy --only hosting --project orderapp-35200 --non-interactive --debug

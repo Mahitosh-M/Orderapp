@@ -19,6 +19,8 @@
 .bottom-nav a { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 5px 2px; border-radius: 8px; color: var(--muted); font-size: 10px; font-weight: 800; transition: color .16s ease, background .16s ease; }
 .bottom-nav a span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bottom-nav a.active { color: var(--navy); background: #f1f4f8; }
+.admin-bottom-nav { grid-template-columns: 1fr; }
+.admin-bottom-nav a { width: min(220px, 100%); justify-self: center; }
 .cart-fab { position: absolute; right: 16px; bottom: 72px; width: 56px; height: 56px; display: grid !important; place-items: center; color: var(--navy) !important; background: var(--gold); border: 3px solid var(--white); border-radius: 50%; box-shadow: var(--shadow); }
 .page-stack { display: grid; gap: 18px; }
 .page-title-row, .card-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -79,6 +81,7 @@ dd { margin: 0; font-weight: 700; }
 .toast-stack { position: fixed; right: 12px; bottom: 100px; z-index: 60; display: grid; gap: 8px; }
 .toast { display: flex; align-items: center; gap: 8px; max-width: 340px; padding: 10px 12px; border-radius: 8px; color: var(--white); background: var(--navy); }
 .toast button { color: inherit; background: transparent; border: 0; }
+.launch-warning { margin-bottom: 16px; padding: 12px 14px; color: #93370d; background: #ffead5; border: 1px solid #fedf89; border-radius: 8px; font-weight: 800; }
 .login-page { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: var(--navy); }
 .login-panel { width: min(420px, 100%); display: grid; gap: 16px; padding: 22px; background: var(--white); border-radius: 8px; }
 .login-logo { color: var(--navy); }

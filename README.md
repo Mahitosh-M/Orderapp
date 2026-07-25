@@ -4,7 +4,7 @@ Customer-facing wholesale pharmaceutical ordering PWA built as a separate React,
 
 ## Stack
 
-React, TypeScript, Vite, React Router, Firebase Authentication, Cloud Firestore, Firebase Hosting, IndexedDB via `idb`, `vite-plugin-pwa`, `lucide-react`, Vitest and React Testing Library.
+React, TypeScript, Vite, React Router, Cloud Firestore, Firebase Hosting, IndexedDB via `idb`, `vite-plugin-pwa`, `lucide-react`, Vitest and React Testing Library.
 
 ## Setup
 
@@ -34,9 +34,24 @@ Firestore collections:
 - `customers/{uid}`: active customer/admin profiles.
 - `orders/{orderId}`: one submitted order document containing a snapshot of public product fields and quantities.
 
-Authentication uses Firebase email/password. Public registration is intentionally not implemented.
+The login page has been removed. The app now expects launch parameters from CISapp for the customer name and role.
 
-Admin access in the client comes from `customers/{uid}.role`, but production Firestore rules require a secure Firebase Auth custom claim: `request.auth.token.admin == true`. Create that claim only through a trusted backend/Admin SDK environment.
+Admin access in the UI comes from the CISapp launch role, but production Firestore rules still require a secure Firebase Auth custom claim for protected order reads: `request.auth.token.admin == true`. A URL parameter is only for routing the UI and must not be treated as secure authorization for Firestore data.
+
+## CISapp Launch
+
+Ordering App is intended to be opened from `https://cisapp-236ab.web.app/` with two query parameters:
+
+```text
+https://orderapp-35200.web.app/?customerName=Customer%20Name&role=customer
+https://orderapp-35200.web.app/?customerName=Admin%20Name&role=admin
+```
+
+Supported roles are `customer` and `admin`.
+
+- `customer` opens the mobile-first ordering experience and uses `customerName` in the customer UI.
+- `admin` opens `/admin/orders` and only exposes order-management navigation.
+- Launches with parameters are accepted only when the browser referrer is `cisapp-236ab.web.app`.
 
 ## Catalogue
 
@@ -78,7 +93,7 @@ The app includes a manifest, service worker, install guidance, standalone displa
 
 ## Known Limitations
 
-- No public registration.
+- No public registration or login page.
 - No account-management UI.
 - Admin custom claims must be created securely outside this app.
 - No ERP SSO yet.

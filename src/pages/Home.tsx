@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom'
 import { ClipboardList, Download, PackageSearch, ShieldCheck, ShoppingCart, Sparkles } from 'lucide-react'
 import { useCatalogue } from '../hooks/useCatalogue'
 import { useCart } from '../hooks/useCart'
+import { useLaunch } from '../hooks/useLaunch'
 import { formatDate } from '../utils/formatting'
 
 export function Home() {
   const { catalogue } = useCatalogue()
   const { totalProducts, totalQuantity } = useCart()
+  const { customerName } = useLaunch()
   const categories = catalogue?.categories.slice(0, 6) ?? []
 
   return (
@@ -14,7 +16,7 @@ export function Home() {
       <div className="home-hero">
         <div>
           <span className="hero-kicker"><Sparkles size={15} /> Live catalogue</span>
-          <h1>Partner Order</h1>
+          <h1>{customerName ? `Hello, ${customerName}` : 'Partner Order'}</h1>
           <p>Browse products, build a cart, and send wholesale medicine orders from phone or desktop.</p>
         </div>
         <div className="hero-actions">
