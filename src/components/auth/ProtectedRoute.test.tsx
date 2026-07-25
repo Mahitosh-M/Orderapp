@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { ProtectedRoute } from './ProtectedRoute'
 
 vi.mock('../../services/firebase', () => ({ isFirebaseConfigured: () => true }))
-vi.mock('../../hooks/useAuth', () => ({ useAuth: () => ({ user: null, customer: null, loading: false, isAdmin: false, isCustomer: false }) }))
+vi.mock('../../hooks/useAuth', () => ({ useAuth: () => ({ user: null, customer: null, loading: false, isStaff: false, isCustomer: false }) }))
 
 describe('protected routes', () => {
   it('redirects unauthenticated customers to login', async () => {

@@ -49,7 +49,7 @@ export function OrderDetails() {
         <p>Status: <strong>{order.status}</strong></p>
         <p>{formatDate(order.createdAt)} · Updated {formatDate(order.updatedAt)}</p>
         <p>{deliveryLabel(order.deliveryPreference)} · {order.deliveryAddress}</p>
-        <div className="timeline">{['submitted', 'confirmed', 'processing', 'dispatched', 'delivered'].map((status) => <span className={status === order.status ? 'active' : ''} key={status}>{status}</span>)}</div>
+        <div className="timeline">{['pending', 'confirmed'].map((status) => <span className={status === order.status ? 'active' : ''} key={status}>{status}</span>)}</div>
         {reorderMessage && <p className="rate-note">{reorderMessage}</p>}
         <button className="button secondary" onClick={reorder}>Reorder to cart</button>
         <h2>Items</h2>

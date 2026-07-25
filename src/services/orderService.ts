@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -33,7 +34,7 @@ export function createOrderPayload(customer: CustomerProfile, items: CartItem[],
     customerMobile: customer.mobile,
     deliveryAddress: customer.address,
     deliveryPreference: draft.deliveryPreference,
-    status: 'submitted' as OrderStatus,
+    status: 'pending' as OrderStatus,
     items: items.map((item) => ({ ...item })),
     totalProducts: items.length,
     totalQuantity,
@@ -52,7 +53,7 @@ export async function submitOrder(customer: CustomerProfile, items: CartItem[], 
 
 export async function getCustomerOrders(uid: string, count = 20) {
   const { db } = getFirebaseServices()
-  const snapshot = await getDocs(query(collection(db, 'orders'), where('customerId', '==', uid), orderBy('createdAt', 'desc'), limit(count)))
+  const snapshot = await getDocs(query(collection(db, 'orders'), where('customerName', '==', uid), orderBy('createdAt', 'desc'), limit(count)))
   return snapshot.docs.map((item) => ({ id: item.id, ...item.data() }) as Order)
 }
 
@@ -74,6 +75,35 @@ export async function getAdminOrders(status?: OrderStatus) {
     : [orderBy('createdAt', 'desc'), limit(50)]
   const snapshot = await getDocs(query(collection(db, 'orders'), ...constraints))
   return snapshot.docs.map((item) => ({ id: item.id, ...item.data() }) as Order)
+}
+
+export async function getStaffOrders() {
+  const { db } = getFirebaseServices()
+  const snapshot = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(100)))
+  return snapshot.docs
+    .map((item) => ({ id: item.id, ...item.data() }) as Order)
+    .filter((order) => order.status !== 'delivered')
+}
+
+export async function updateStaffOrderItems(id: string, items: CartItem[]) {
+  validateCartItems(items)
+  const { db } = getFirebaseServices()
+  await updateDoc(doc(db, 'orders', id), {
+    items: items.map((item) => ({ ...item })),
+    totalProducts: items.length,
+    totalQuantity: items.reduce((sum, item) => sum + item.quantity, 0),
+    updatedAt: serverTimestamp(),
+  })
+}
+
+export async function updateStaffOrderStatus(id: string, status: Extract<OrderStatus, 'confirmed'>) {
+  const { db } = getFirebaseServices()
+  await updateDoc(doc(db, 'orders', id), { status, updatedAt: serverTimestamp() })
+}
+
+export async function deliverStaffOrder(id: string) {
+  const { db } = getFirebaseServices()
+  await deleteDoc(doc(db, 'orders', id))
 }
 
 export async function updateAdminOrder(id: string, status: OrderStatus, adminNote: string) {

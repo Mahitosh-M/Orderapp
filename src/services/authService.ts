@@ -20,7 +20,7 @@ export async function loadCustomerProfile(user: User) {
   if (!snapshot.exists()) throw new Error('Your customer profile was not found. Contact the supplier.')
   const customer = snapshot.data() as CustomerProfile
   if (!customer.active) throw new Error('This account is disabled. Contact the supplier.')
-  if (customer.role !== 'customer' && customer.role !== 'admin') {
+  if (customer.role !== 'customer' && customer.role !== 'staff') {
     throw new Error('This account has an invalid role. Contact the supplier.')
   }
   return customer

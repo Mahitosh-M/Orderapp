@@ -17,15 +17,15 @@ function Logo() {
 export function AppHeader() {
   const { totalQuantity } = useCart()
   const { offline } = useCatalogue()
-  const { customerName, isAdmin } = useLaunch()
+  const { customerName, isStaff } = useLaunch()
   const navigate = useNavigate()
 
   return (
     <header className="app-header">
       <Logo />
       <nav className="desktop-nav" aria-label="Primary">
-        {isAdmin ? (
-          <NavLink to="/admin/orders"><ClipboardList size={16} />Orders</NavLink>
+        {isStaff ? (
+          <NavLink to="/staff/orders"><ClipboardList size={16} />Orders</NavLink>
         ) : (
           <>
             <NavLink to="/" end>Catalogue</NavLink>
@@ -34,9 +34,9 @@ export function AppHeader() {
         )}
       </nav>
       <div className="header-actions">
-        {customerName && <span className="role-pill">{isAdmin ? 'Admin' : customerName}</span>}
+        {customerName && <span className="role-pill">{isStaff ? 'Staff' : customerName}</span>}
         {offline && <span className="offline-pill">Offline</span>}
-        {!isAdmin && (
+        {!isStaff && (
           <>
             <button title="Cart" aria-label="Cart" className="icon-button cart-icon" onClick={() => navigate('/cart')}>
               <ShoppingCart size={20} />

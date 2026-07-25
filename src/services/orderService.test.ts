@@ -20,10 +20,10 @@ const customer: CustomerProfile = {
 const item: CartItem = { productId: 'P1', productName: 'Public Product', composition: 'Comp', company: 'Co', category: 'Cat', packing: 'Pack', mrp: 10, imageUrl: '', quantity: 3 }
 
 describe('order payload creation', () => {
-  it('creates a customer-owned submitted order snapshot without selling price fields', () => {
+  it('creates a customer-owned pending order snapshot without selling price fields', () => {
     const payload = createOrderPayload(customer, [item], { deliveryPreference: 'bus', customerNote: 'Please send tomorrow' })
     expect(payload.customerId).toBe('u1')
-    expect(payload.status).toBe('submitted')
+    expect(payload.status).toBe('pending')
     expect(payload.totalProducts).toBe(1)
     expect(payload.totalQuantity).toBe(3)
     expect(JSON.stringify(payload)).not.toContain('sellingPrice')

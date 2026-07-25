@@ -8,12 +8,12 @@ const items = [
 ]
 
 export function BottomNavigation() {
-  const { isAdmin } = useLaunch()
+  const { isStaff } = useLaunch()
 
-  if (isAdmin) {
+  if (isStaff) {
     return (
-      <nav className="bottom-nav admin-bottom-nav" aria-label="Admin">
-        <NavLink to="/admin/orders">
+      <nav className="bottom-nav admin-bottom-nav" aria-label="Staff">
+        <NavLink to="/staff/orders">
           <ShieldCheck size={20} />
           <span>Orders</span>
         </NavLink>

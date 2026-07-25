@@ -8,26 +8,24 @@ import { MyOrders } from './pages/MyOrders'
 import { OrderDetails } from './pages/OrderDetails'
 import { InstallApp } from './pages/InstallApp'
 import { NotFound } from './pages/NotFound'
-import { AdminOrders } from './pages/admin/AdminOrders'
-import { AdminOrderDetails } from './pages/admin/AdminOrderDetails'
+import { StaffOrders } from './pages/staff/StaffOrders'
 import { useLaunch } from './hooks/useLaunch'
 import { LoadingState } from './components/common/LoadingState'
 
 export function App() {
-  const { isAdmin, loading } = useLaunch()
+  const { isStaff, loading } = useLaunch()
 
   if (loading) return <LoadingState label="Loading customer" />
 
   return (
     <Routes>
       <Route element={<CustomerLayout />}>
-        {isAdmin ? (
+        {isStaff ? (
           <>
-            <Route index element={<Navigate to="/admin/orders" replace />} />
-            <Route path="admin" element={<Navigate to="/admin/orders" replace />} />
-            <Route path="admin/orders" element={<AdminOrders />} />
-            <Route path="admin/orders/:id" element={<AdminOrderDetails />} />
-            <Route path="*" element={<Navigate to="/admin/orders" replace />} />
+            <Route index element={<Navigate to="/staff/orders" replace />} />
+            <Route path="staff" element={<Navigate to="/staff/orders" replace />} />
+            <Route path="staff/orders" element={<StaffOrders />} />
+            <Route path="*" element={<Navigate to="/staff/orders" replace />} />
           </>
         ) : (
           <>
@@ -41,7 +39,7 @@ export function App() {
             <Route path="install" element={<InstallApp />} />
             <Route path="offers" element={<Navigate to="/" replace />} />
             <Route path="profile" element={<Navigate to="/" replace />} />
-            <Route path="admin/*" element={<Navigate to="/" replace />} />
+            <Route path="staff/*" element={<Navigate to="/" replace />} />
           </>
         )}
       </Route>

@@ -10,7 +10,7 @@ interface AuthContextValue {
   loading: boolean
   login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
-  isAdmin: boolean
+  isStaff: boolean
   isCustomer: boolean
   authError: string | null
 }
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value = useMemo(
-    () => ({ user, customer, loading, login, logout, isAdmin: customer?.role === 'admin', isCustomer: customer?.role === 'customer', authError }),
+    () => ({ user, customer, loading, login, logout, isStaff: customer?.role === 'staff', isCustomer: customer?.role === 'customer', authError }),
     [user, customer, loading, login, logout, authError],
   )
 

@@ -1,8 +1,7 @@
 import { createContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { CustomerProfile } from '../types/customer'
-import { loadLaunchProfile } from '../services/launchService'
 
-export type LaunchRole = 'customer' | 'admin'
+export type LaunchRole = 'customer' | 'staff'
 
 export interface LaunchSession {
   uid: string
@@ -19,7 +18,7 @@ interface LaunchContextValue {
   customerId: string
   customerName: string
   role: LaunchRole | null
-  isAdmin: boolean
+  isStaff: boolean
   isCustomer: boolean
   loading: boolean
   error: string | null
@@ -31,7 +30,8 @@ const storageKey = 'partner-order-launch-session'
 const allowedOpenerHost = 'cisapp-236ab.web.app'
 
 function parseRole(value: string | null): LaunchRole | null {
-  if (value === 'customer' || value === 'admin') return value
+  const normalized = value?.trim().toLowerCase()
+  if (normalized === 'customer' || normalized === 'staff') return normalized
   return null
 }
 
@@ -54,6 +54,22 @@ function loadStoredSession(): LaunchSession | null {
   }
 }
 
+function createLaunchProfile(name: string, role: LaunchRole): CustomerProfile {
+  return {
+    uid: name,
+    customerCode: name,
+    businessName: name,
+    ownerName: name,
+    mobile: '',
+    email: '',
+    address: '',
+    active: true,
+    role,
+    createdAt: '',
+    updatedAt: '',
+  }
+}
+
 function launchedFromAllowedHost() {
   if (!document.referrer) return false
   try {
@@ -69,54 +85,39 @@ export function LaunchProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    let cancelled = false
     const params = new URLSearchParams(window.location.search)
-    const uid = (params.get('uid') ?? params.get('UID'))?.trim()
-    const customerId = (
-      params.get('customerId') ??
-      params.get('customerID') ??
-      params.get('Customerid') ??
-      params.get('customerid')
-    )?.trim()
+    const name = (params.get('name') ?? params.get('customerName') ?? params.get('userName'))?.trim()
+    const role = parseRole(params.get('role'))
 
-    if (!uid && !customerId) return
+    if (!name && !role) return
 
     if (!launchedFromAllowedHost()) {
       setError('Open this app from CISapp.')
       return
     }
 
-    if (!uid) {
-      setError('Missing uid launch parameter.')
+    if (!name || !role) {
+      setError('Missing name or role launch parameter.')
       return
     }
 
-    setLoading(true)
-    setError(null)
-    loadLaunchProfile(uid, customerId)
-      .then((profile) => {
-        if (cancelled) return
-        const nextSession = {
-          uid,
-          customerId: customerId ?? profile.customerCode,
-          customerName: profile.businessName,
-          role: profile.role,
-          profile,
-        }
-        window.sessionStorage.setItem(storageKey, JSON.stringify(nextSession))
-        setSession(nextSession)
-      })
-      .catch((nextError: Error) => {
-        if (cancelled) return
-        setError(nextError.message)
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-
-    return () => {
-      cancelled = true
+    if (role !== 'customer' && role !== 'staff') {
+      setError('Ordering App can only be opened by customer or staff.')
+      return
     }
+
+    const profile = createLaunchProfile(name, role)
+    const nextSession = {
+      uid: name,
+      customerId: name,
+      customerName: name,
+      role,
+      profile,
+    }
+    window.sessionStorage.setItem(storageKey, JSON.stringify(nextSession))
+    setSession(nextSession)
+    setLoading(false)
+    setError(null)
   }, [])
 
   const value = useMemo(
@@ -127,7 +128,7 @@ export function LaunchProvider({ children }: { children: ReactNode }) {
       customerId: session?.customerId ?? '',
       customerName: session?.customerName ?? '',
       role: session?.role ?? null,
-      isAdmin: session?.role === 'admin',
+      isStaff: session?.role === 'staff',
       isCustomer: session?.role === 'customer',
       loading,
       error,

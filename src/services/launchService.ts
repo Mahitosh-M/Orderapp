@@ -16,7 +16,7 @@ export async function loadLaunchProfile(uid: string, customerId?: string) {
     throw new Error('This customer profile is disabled.')
   }
 
-  if (profile.role !== 'customer' && profile.role !== 'admin') {
+  if (profile.role !== 'customer' && profile.role !== 'staff') {
     throw new Error('This customer profile has an invalid role.')
   }
 

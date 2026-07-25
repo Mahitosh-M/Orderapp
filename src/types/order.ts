@@ -17,12 +17,9 @@ export type OrderItem = CartItem
 export type DeliveryPreference = 'bus' | 'home' | 'shop'
 
 export type OrderStatus =
-  | 'submitted'
+  | 'pending'
   | 'confirmed'
-  | 'processing'
-  | 'dispatched'
   | 'delivered'
-  | 'cancelled'
 
 export interface Order {
   id: string
