@@ -7,11 +7,12 @@ import { useCatalogue } from '../../hooks/useCatalogue'
 import { ProductImage } from './ProductImage'
 import { QuantitySelector } from './QuantitySelector'
 
-export function ProductCard({ product, showRelated = false }: { product: Product; showRelated?: boolean }) {
+export function ProductCard({ product, relatedSearchTerm = '' }: { product: Product; relatedSearchTerm?: string }) {
   const { addProduct, items, updateQuantity } = useCart()
   const { catalogue } = useCatalogue()
   const cartItem = items.find((item) => item.productId === product.id)
-  const relatedProducts = cartItem || showRelated
+  const hasExactSearchMatch = relatedSearchTerm.trim().toLowerCase() === product.name.trim().toLowerCase()
+  const relatedProducts = cartItem || hasExactSearchMatch
     ? (catalogue?.products ?? [])
       .filter((item) => item.id !== product.id && item.available && item.composition.trim().toLowerCase() === product.composition.trim().toLowerCase())
       .slice(0, 12)

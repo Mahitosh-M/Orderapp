@@ -42,7 +42,7 @@ export function Catalogue() {
       <ProductFilters catalogue={catalogue} query={query} setQuery={(next) => { setQuery(next); setPage(1) }} />
       {hasProductQuery ? (
         <>
-          <ProductList products={visible} showRelated />
+          <ProductList products={visible} relatedSearchTerm={debouncedSearch} />
           {visible.length < products.length && <button className="button secondary wide" onClick={() => setPage((value) => value + 1)}>Load more</button>}
         </>
       ) : null}
