@@ -26,6 +26,7 @@ function DeliveryIcon({ value }: { value: Order['deliveryPreference'] }) {
 export function StaffOrders() {
   const [orders, setOrders] = useState<Order[]>([])
   const [draftItemsByOrder, setDraftItemsByOrder] = useState<Record<string, CartItem[]>>({})
+  const [expandedOrderIds, setExpandedOrderIds] = useState<Set<string>>(() => new Set())
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -49,6 +50,15 @@ export function StaffOrders() {
   }, [])
 
   const totalPending = useMemo(() => orders.filter((order) => order.status === 'pending').length, [orders])
+
+  function toggleOrder(orderId: string) {
+    setExpandedOrderIds((current) => {
+      const next = new Set(current)
+      if (next.has(orderId)) next.delete(orderId)
+      else next.add(orderId)
+      return next
+    })
+  }
 
   async function saveItems(order: Order) {
     const items = draftItemsByOrder[order.id] ?? order.items
@@ -102,44 +112,54 @@ export function StaffOrders() {
       <div className="order-list">
         {orders.map((order) => {
           const draftItems = draftItemsByOrder[order.id] ?? order.items
+          const isExpanded = expandedOrderIds.has(order.id)
           return (
-            <article className="order-card staff-order-card" key={order.id}>
+            <article
+              className={`order-card staff-order-card ${isExpanded ? 'expanded' : ''}`}
+              key={order.id}
+              onClick={() => toggleOrder(order.id)}
+            >
               <div className="page-title-row">
                 <div>
                   <h2 className="staff-customer-line">{order.customerName}{order.customerArea ? <span>{order.customerArea}</span> : null}</h2>
                   <p className="staff-order-date">{formatDate(order.createdAt)}</p>
                   <p>{order.orderNumber} · {formatDate(order.createdAt)}</p>
                 </div>
-                <span className={`badge ${order.status === 'pending' ? 'warning' : 'success'}`}>{order.status}</span>
+                <div className="staff-order-side">
+                  <div className="staff-delivery-pill"><DeliveryIcon value={order.deliveryPreference} />{deliveryLabel(order.deliveryPreference)}</div>
+                </div>
               </div>
-              <div className="staff-delivery-pill"><DeliveryIcon value={order.deliveryPreference} />{deliveryLabel(order.deliveryPreference)}</div>
-              <div className="staff-order-items">
-                {draftItems.map((item) => (
-                  <div className="staff-order-item" key={item.productId}>
-                    <span>
-                      <strong>{item.productName}</strong>
-                      <small>{item.company} · {item.composition} · {item.category}</small>
-                    </span>
-                    <input
-                      aria-label={`Quantity for ${item.productName}`}
-                      inputMode="numeric"
-                      value={item.quantity}
-                      onFocus={(event) => event.currentTarget.select()}
-                      onChange={(event) =>
-                        setDraftItemsByOrder((current) => ({
-                          ...current,
-                          [order.id]: recalculateItem(draftItems, item.productId, event.target.value.trim() === '' ? 0 : Number(event.target.value)),
-                        }))
-                      }
-                    />
+              {isExpanded ? (
+                <div className="staff-order-expanded" onClick={(event) => event.stopPropagation()}>
+                  <div className="staff-order-items">
+                    {draftItems.map((item) => (
+                      <div className="staff-order-item" key={item.productId}>
+                        <span>
+                          <strong>{item.productName}</strong>
+                          <small>{item.company} - {item.composition} - {item.packing}</small>
+                        </span>
+                        <input
+                          aria-label={`Quantity for ${item.productName}`}
+                          inputMode="numeric"
+                          value={item.quantity}
+                          onFocus={(event) => event.currentTarget.select()}
+                          onChange={(event) =>
+                            setDraftItemsByOrder((current) => ({
+                              ...current,
+                              [order.id]: recalculateItem(draftItems, item.productId, event.target.value.trim() === '' ? 0 : Number(event.target.value)),
+                            }))
+                          }
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <div className="staff-order-actions">
-                <button className="button secondary" disabled={savingId === order.id} onClick={() => void saveItems(order)}>Save edits</button>
-                <button className="button primary" disabled={savingId === order.id || order.status === 'confirmed'} onClick={() => void confirmOrder(order)}>Confirm</button>
-                <button className="button danger" disabled={savingId === order.id} onClick={() => void deliverOrder(order)}>Delivered</button>
-              </div>
+                  <div className="staff-order-actions">
+                    <button className="button secondary" disabled={savingId === order.id || order.status === 'confirmed'} onClick={() => void saveItems(order)}>Save edits</button>
+                    <button className="button primary" disabled={savingId === order.id || order.status === 'confirmed'} onClick={() => void confirmOrder(order)}>Confirm</button>
+                    <button className="button danger" disabled={savingId === order.id} onClick={() => void deliverOrder(order)}>Delivered</button>
+                  </div>
+                </div>
+              ) : null}
             </article>
           )
         })}

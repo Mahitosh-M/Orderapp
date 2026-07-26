@@ -12,7 +12,8 @@ export function ProductCard({ product, relatedSearchTerm = '' }: { product: Prod
   const { catalogue } = useCatalogue()
   const cartItem = items.find((item) => item.productId === product.id)
   const hasExactSearchMatch = relatedSearchTerm.trim().toLowerCase() === product.name.trim().toLowerCase()
-  const relatedProducts = cartItem || hasExactSearchMatch
+  const hasSearchContext = Boolean(relatedSearchTerm.trim())
+  const relatedProducts = hasExactSearchMatch || (cartItem && hasSearchContext)
     ? (catalogue?.products ?? [])
       .filter((item) => item.id !== product.id && item.available && item.composition.trim().toLowerCase() === product.composition.trim().toLowerCase())
       .slice(0, 12)
@@ -52,16 +53,29 @@ export function ProductCard({ product, relatedSearchTerm = '' }: { product: Prod
       </div>
       {relatedProducts.length > 0 ? (
         <div className="related-products-row" aria-label={`Similar ${product.composition} products`}>
-          {relatedProducts.map((item) => (
-            <button className="related-product-tile" type="button" key={item.id} onClick={() => addProduct(item, 1)}>
-              <ProductImage src={item.imageUrl} alt="" />
-              <span>
-                <strong>{item.name}</strong>
-                <small>{item.company} · {formatMrp(item.mrp)}</small>
-              </span>
-              <ShoppingCart size={14} />
-            </button>
-          ))}
+          {relatedProducts.map((item) => {
+            const relatedCartItem = items.find((cartEntry) => cartEntry.productId === item.id)
+            return (
+              <article className="related-product-tile" key={item.id}>
+                <Link to={`/catalogue/${item.id}`} className="related-product-image-link">
+                  <ProductImage src={item.imageUrl} alt={item.name} />
+                </Link>
+                <span>
+                  <strong><Link to={`/catalogue/${item.id}`}>{item.name}</Link></strong>
+                  <small>{item.company} - {formatMrp(item.mrp)}</small>
+                </span>
+                <div className="related-product-action">
+                  {relatedCartItem ? (
+                    <QuantitySelector value={relatedCartItem.quantity} allowZero onChange={(quantity) => updateQuantity(item.id, quantity)} />
+                  ) : (
+                    <button className="button primary compact-add" type="button" onClick={() => addProduct(item, 1)}>
+                      <ShoppingCart size={14} />
+                    </button>
+                  )}
+                </div>
+              </article>
+            )
+          })}
         </div>
       ) : null}
     </article>

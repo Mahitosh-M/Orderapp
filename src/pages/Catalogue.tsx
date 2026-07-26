@@ -17,15 +17,21 @@ export function Catalogue() {
   const [searchParams] = useSearchParams()
   const selectedCategory = searchParams.get('category') ?? ''
   const selectedComposition = searchParams.get('composition') ?? ''
-  const [query, setQuery] = useState(() => ({ ...defaultQuery, category: selectedCategory, composition: selectedComposition }))
+  const [query, setQuery] = useState(defaultQuery)
   const [page, setPage] = useState(1)
   const debouncedSearch = useDebounce(query.search)
-  const effectiveQuery = { ...query, search: debouncedSearch }
+  const hasSearch = Boolean(debouncedSearch.trim())
+  const routeQuery = {
+    category: hasSearch ? query.category : query.category || selectedCategory,
+    composition: hasSearch ? query.composition : query.composition || selectedComposition,
+  }
+  const effectiveQuery = { ...query, ...routeQuery, search: debouncedSearch }
   const products = useMemo(() => (catalogue ? filterAndSortProducts(catalogue.products, effectiveQuery) : []), [catalogue, effectiveQuery])
-  const hasProductQuery = Boolean(debouncedSearch.trim() || query.category || query.composition || query.company || query.availableOnly)
+  const hasRouteQuery = Boolean(selectedCategory || selectedComposition)
+  const isRouteProductPage = hasRouteQuery && !hasSearch && !query.category && !query.composition && !query.company && !query.availableOnly
+  const hasProductQuery = Boolean(hasSearch || hasRouteQuery || query.category || query.composition || query.company || query.availableOnly)
   const visible = products.slice(0, page * query.pageSize)
   useEffect(() => {
-    setQuery((current) => ({ ...current, category: selectedCategory, composition: selectedComposition }))
     setPage(1)
   }, [selectedCategory, selectedComposition])
   if (loading) return <LoadingState label="Loading catalogue" />
@@ -39,7 +45,7 @@ export function Catalogue() {
       </div>
       {offline && <ErrorState message="You are offline. Cached catalogue remains available." />}
       {error && <ErrorState message={error} />}
-      <ProductFilters catalogue={catalogue} query={query} setQuery={(next) => { setQuery(next); setPage(1) }} />
+      {!isRouteProductPage && <ProductFilters catalogue={catalogue} query={query} setQuery={(next) => { setQuery(next); setPage(1) }} />}
       {hasProductQuery ? (
         <>
           <ProductList products={visible} relatedSearchTerm={debouncedSearch} />
