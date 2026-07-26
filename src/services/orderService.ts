@@ -15,7 +15,7 @@ import {
 import type { CustomerProfile } from '../types/customer'
 import type { CartItem, DeliveryPreference, Order, OrderDraft, OrderStatus } from '../types/order'
 import { getFirebaseServices } from './firebase'
-import { validateCartItems } from '../utils/validation'
+import { validateCartItems, validateStaffOrderItems } from '../utils/validation'
 
 export function createOrderNumber(date = new Date()) {
   const stamp = date.toISOString().slice(0, 10).replaceAll('-', '')
@@ -36,7 +36,7 @@ export function createOrderPayload(customer: CustomerProfile, items: CartItem[],
     deliveryAddress: customer.address,
     deliveryPreference: draft.deliveryPreference,
     status: 'pending' as OrderStatus,
-    items: items.map((item) => ({ ...item })),
+    items: items.map((item) => ({ ...item, requestedQuantity: item.requestedQuantity ?? item.quantity })),
     totalProducts: items.length,
     totalQuantity,
     customerNote: draft.customerNote.trim(),
@@ -90,7 +90,7 @@ export async function getStaffOrders() {
 }
 
 export async function updateStaffOrderItems(id: string, items: CartItem[]) {
-  validateCartItems(items)
+  validateStaffOrderItems(items)
   const { db } = getFirebaseServices()
   await updateDoc(doc(db, 'orders', id), {
     items: items.map((item) => ({ ...item })),

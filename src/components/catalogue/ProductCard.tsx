@@ -7,11 +7,11 @@ import { useCatalogue } from '../../hooks/useCatalogue'
 import { ProductImage } from './ProductImage'
 import { QuantitySelector } from './QuantitySelector'
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, showRelated = false }: { product: Product; showRelated?: boolean }) {
   const { addProduct, items, updateQuantity } = useCart()
   const { catalogue } = useCatalogue()
   const cartItem = items.find((item) => item.productId === product.id)
-  const relatedProducts = cartItem
+  const relatedProducts = cartItem || showRelated
     ? (catalogue?.products ?? [])
       .filter((item) => item.id !== product.id && item.available && item.composition.trim().toLowerCase() === product.composition.trim().toLowerCase())
       .slice(0, 12)

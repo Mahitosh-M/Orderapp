@@ -17,7 +17,17 @@ export function QuantitySelector({
       <button title="Decrease quantity" aria-label="Decrease quantity" onClick={() => onChange(Math.max(minValue, value - 1))}>
         <Minus size={16} />
       </button>
-      <input aria-label="Quantity" value={value} inputMode="numeric" onChange={(event) => onChange(Math.max(minValue, Math.min(MAX_CART_QUANTITY, Number(event.target.value) || minValue)))} />
+      <input
+        aria-label="Quantity"
+        value={value}
+        inputMode="numeric"
+        onFocus={(event) => event.currentTarget.select()}
+        onChange={(event) => {
+          const rawValue = event.target.value.trim()
+          const nextValue = rawValue === '' ? minValue : Number(rawValue)
+          onChange(Math.max(minValue, Math.min(MAX_CART_QUANTITY, Number.isFinite(nextValue) ? nextValue : minValue)))
+        }}
+      />
       <button title="Increase quantity" aria-label="Increase quantity" onClick={() => onChange(Math.min(MAX_CART_QUANTITY, value + 1))}>
         <Plus size={16} />
       </button>

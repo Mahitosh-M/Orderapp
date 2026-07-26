@@ -47,3 +47,12 @@ export function validateCartItems(items: CartItem[]) {
     }
   }
 }
+
+export function validateStaffOrderItems(items: CartItem[]) {
+  if (items.length === 0) throw new Error('Order has no items.')
+  for (const item of items) {
+    if (!Number.isInteger(item.quantity) || item.quantity < 0 || item.quantity > MAX_CART_QUANTITY) {
+      throw new Error(`Invalid quantity for ${item.productName}.`)
+    }
+  }
+}

@@ -10,6 +10,7 @@ export interface CartItem {
   mrp: number
   imageUrl: string
   quantity: number
+  requestedQuantity?: number
 }
 
 export type OrderItem = CartItem

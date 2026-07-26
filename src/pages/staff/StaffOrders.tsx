@@ -9,11 +9,18 @@ import {
 import { EmptyState } from '../../components/common/EmptyState'
 import { ErrorState } from '../../components/common/ErrorState'
 import { LoadingState } from '../../components/common/LoadingState'
-import { formatDate } from '../../utils/formatting'
+import { deliveryLabel, formatDate } from '../../utils/formatting'
+import { Bus, Home, Store } from 'lucide-react'
 
 function recalculateItem(items: CartItem[], productId: string, quantity: number) {
-  const safeQuantity = Math.max(1, Math.floor(quantity || 1))
+  const safeQuantity = Math.max(0, Math.floor(Number.isFinite(quantity) ? quantity : 0))
   return items.map((item) => (item.productId === productId ? { ...item, quantity: safeQuantity } : item))
+}
+
+function DeliveryIcon({ value }: { value: Order['deliveryPreference'] }) {
+  if (value === 'home') return <Home size={13} />
+  if (value === 'shop') return <Store size={13} />
+  return <Bus size={13} />
 }
 
 export function StaffOrders() {
@@ -99,12 +106,13 @@ export function StaffOrders() {
             <article className="order-card staff-order-card" key={order.id}>
               <div className="page-title-row">
                 <div>
-                  <h2>{order.customerName}</h2>
-                  {order.customerArea ? <p className="staff-customer-area">{order.customerArea}</p> : null}
+                  <h2 className="staff-customer-line">{order.customerName}{order.customerArea ? <span>{order.customerArea}</span> : null}</h2>
+                  <p className="staff-order-date">{formatDate(order.createdAt)}</p>
                   <p>{order.orderNumber} · {formatDate(order.createdAt)}</p>
                 </div>
                 <span className={`badge ${order.status === 'pending' ? 'warning' : 'success'}`}>{order.status}</span>
               </div>
+              <div className="staff-delivery-pill"><DeliveryIcon value={order.deliveryPreference} />{deliveryLabel(order.deliveryPreference)}</div>
               <div className="staff-order-items">
                 {draftItems.map((item) => (
                   <div className="staff-order-item" key={item.productId}>
@@ -116,10 +124,11 @@ export function StaffOrders() {
                       aria-label={`Quantity for ${item.productName}`}
                       inputMode="numeric"
                       value={item.quantity}
+                      onFocus={(event) => event.currentTarget.select()}
                       onChange={(event) =>
                         setDraftItemsByOrder((current) => ({
                           ...current,
-                          [order.id]: recalculateItem(draftItems, item.productId, Number(event.target.value)),
+                          [order.id]: recalculateItem(draftItems, item.productId, event.target.value.trim() === '' ? 0 : Number(event.target.value)),
                         }))
                       }
                     />

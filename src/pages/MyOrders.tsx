@@ -31,16 +31,15 @@ export function MyOrders() {
         {orders.map((order) => (
           <article className="order-card my-order-card" key={order.id}>
             <div className="my-order-card-head">
-              <span className="my-order-icon"><ShoppingBag size={20} /></span>
+              <span className={`my-order-icon status-${order.status}`}><ShoppingBag size={20} /></span>
               <div>
-                <h2>{order.orderNumber}</h2>
+                <h2>Order placed</h2>
                 <p><Clock3 size={13} />{formatDate(order.createdAt)}</p>
               </div>
             </div>
             <div className="my-order-meta">
-              <span><PackageCheck size={13} />{order.status}</span>
+              <span className={`order-status-pill ${order.status}`}><PackageCheck size={14} />{order.status}</span>
               <span>{order.totalProducts} products</span>
-              <span>{order.totalQuantity} qty</span>
               <span>{deliveryLabel(order.deliveryPreference)}</span>
             </div>
             <Link className="button primary compact-button" to={`/orders/${order.id}`}>View details</Link>

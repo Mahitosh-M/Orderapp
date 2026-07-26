@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CustomerLayout } from './components/layout/CustomerLayout'
 import { Catalogue } from './pages/Catalogue'
+import { CategoryCompositions } from './pages/CategoryCompositions'
 import { ProductDetails } from './pages/ProductDetails'
 import { Cart } from './pages/Cart'
 import { Checkout } from './pages/Checkout'
@@ -30,6 +31,8 @@ export function App() {
         ) : (
           <>
             <Route index element={<Catalogue />} />
+            <Route path="categories" element={<Navigate to="/" replace />} />
+            <Route path="categories/:category" element={<CategoryCompositions />} />
             <Route path="catalogue" element={<Catalogue />} />
             <Route path="catalogue/:id" element={<ProductDetails />} />
             <Route path="cart" element={<Cart />} />
