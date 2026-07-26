@@ -1,8 +1,8 @@
 {
-  "version": 10,
-  "publishedAt": "2026-07-26T11:04:45.597Z",
-  "productCount": 6,
-  "availableProductCount": 6,
+  "version": 11,
+  "publishedAt": "2026-07-26T11:54:24.367Z",
+  "productCount": 7,
+  "availableProductCount": 7,
   "products": [
     {
       "id": "PROD-000006",
@@ -30,7 +30,7 @@
       "id": "PROD-000003",
       "name": "ARICEF O 200 TAB",
       "composition": "Cefixime 200mg Tab",
-      "company": "CIPLA",
+      "company": "MICRO",
       "category": "Antibiotics",
       "packing": "10 Tab",
       "mrp": 110,
@@ -46,6 +46,17 @@
       "packing": "10 Tablets",
       "mrp": 120,
       "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000007",
+      "name": "CEFKEM-200 TAB",
+      "composition": "Cefixime 200mg Tab",
+      "company": "ALKEM",
+      "category": "Antibiotics",
+      "packing": "10 Tablets",
+      "mrp": 200,
+      "imageUrl": "https://res.cloudinary.com/dqmfmbj6t/image/upload/v1785066790/cefekem-200_iz09cu.jpg",
       "available": true
     },
     {
@@ -67,7 +78,7 @@
       "category": "Antibiotics",
       "packing": "10 Tablets",
       "mrp": 120,
-      "imageUrl": "https://res.cloudinary.com/dqmfmbj6t/image/upload/v1784792200/Screenshot_2026-07-23-13-04-56-81_c4b2fae5edd267b2847f1b32e9bc41c3_qdqy7e.jpg",
+      "imageUrl": "",
       "available": true
     }
   ],
