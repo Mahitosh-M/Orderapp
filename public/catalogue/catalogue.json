@@ -1,9 +1,20 @@
 {
-  "version": 9,
-  "publishedAt": "2026-07-25T19:07:29.456Z",
-  "productCount": 5,
-  "availableProductCount": 5,
+  "version": 10,
+  "publishedAt": "2026-07-26T11:04:45.597Z",
+  "productCount": 6,
+  "availableProductCount": 6,
   "products": [
+    {
+      "id": "PROD-000006",
+      "name": "ALKEM PARA 650 TAB",
+      "composition": "PARACETAMOL 650 TAB",
+      "company": "ALKEM",
+      "category": "FEVER",
+      "packing": "20 Tablets",
+      "mrp": 35,
+      "imageUrl": "",
+      "available": true
+    },
     {
       "id": "PROD-000004",
       "name": "ALMOX-CV 625 TAB",
