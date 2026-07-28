@@ -1,8 +1,8 @@
 {
-  "version": 12,
-  "publishedAt": "2026-07-27T11:44:13.297Z",
-  "productCount": 25,
-  "availableProductCount": 25,
+  "version": 13,
+  "publishedAt": "2026-07-28T11:24:36.375Z",
+  "productCount": 34,
+  "availableProductCount": 33,
   "products": [
     {
       "id": "PROD-000006",
@@ -27,6 +27,28 @@
       "available": true
     },
     {
+      "id": "PROD-000033",
+      "name": "ALPAGENTA",
+      "composition": "AMIKACIN 250",
+      "company": "ABBOTT",
+      "category": "STEROIDS / HORMONE",
+      "packing": "1",
+      "mrp": 99.99,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000026",
+      "name": "AMLOBIG-AT TAB",
+      "composition": "AMLODIPINE & ATENOLOL",
+      "company": "PRIME MANKIND",
+      "category": "HEART + BP + SUGAR",
+      "packing": "15 TABLETS",
+      "mrp": 89.04,
+      "imageUrl": "",
+      "available": false
+    },
+    {
       "id": "PROD-000003",
       "name": "ARICEF O 200 TAB",
       "composition": "CEFIXIME 200MG",
@@ -34,6 +56,17 @@
       "category": "ANTIBIOTICS",
       "packing": "10 Tab",
       "mrp": 104.48,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000032",
+      "name": "BUTANID RESPULES",
+      "composition": "AMIKACIN 250",
+      "company": "PCI",
+      "category": "RESPULES",
+      "packing": "1",
+      "mrp": 100,
       "imageUrl": "",
       "available": true
     },
@@ -82,6 +115,28 @@
       "available": true
     },
     {
+      "id": "PROD-000027",
+      "name": "COLDTROY TAB",
+      "composition": "CEFIXIME 100MG",
+      "company": "TROIKAA",
+      "category": "ALLERGY & COUGH & COLD",
+      "packing": "10'S",
+      "mrp": 49.97,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000034",
+      "name": "DISPO VAN 2.5ML",
+      "composition": "AMIKACIN 250",
+      "company": "ABBOTT",
+      "category": "SURGICALS",
+      "packing": "1",
+      "mrp": 100,
+      "imageUrl": "",
+      "available": true
+    },
+    {
       "id": "PROD-000005",
       "name": "DOLO-650 TAB",
       "composition": "PARACETAMOL 650 TAB",
@@ -93,6 +148,17 @@
       "available": true
     },
     {
+      "id": "PROD-000030",
+      "name": "FESTIVE-D E/E DROPS",
+      "composition": "AMIKACIN 250",
+      "company": "LABORATE",
+      "category": "E/E DROPS",
+      "packing": "1",
+      "mrp": 110,
+      "imageUrl": "",
+      "available": true
+    },
+    {
       "id": "PROD-000008",
       "name": "FINECEF 1G",
       "composition": "CEFTRIAXONE 1GM",
@@ -100,6 +166,17 @@
       "category": "ANTIBIOTICS",
       "packing": "1GM",
       "mrp": 66.51,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000028",
+      "name": "ITROZE OC",
+      "composition": "AZITHROMYCIN 500MG",
+      "company": "MAPRO",
+      "category": "ANTIFUNGAL & SKIN",
+      "packing": "15GM",
+      "mrp": 110,
       "imageUrl": "",
       "available": true
     },
@@ -170,6 +247,17 @@
       "available": true
     },
     {
+      "id": "PROD-000029",
+      "name": "POVIDEN 10GM",
+      "composition": "CEFIXIME 50MG",
+      "company": "MAPRO",
+      "category": "ANTISPECTICS & DISINFECTANTS",
+      "packing": "10GM",
+      "mrp": 45,
+      "imageUrl": "",
+      "available": true
+    },
+    {
       "id": "PROD-000022",
       "name": "RANIDER INJ",
       "composition": "RANITIDINE",
@@ -188,6 +276,17 @@
       "category": "GASTROINTESTINAL",
       "packing": "100ML",
       "mrp": 134.4,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000031",
+      "name": "RL 500ML",
+      "composition": "DICLOFENAC  1ml",
+      "company": "IHL",
+      "category": "IV FLUIDS",
+      "packing": "500ML",
+      "mrp": 25,
       "imageUrl": "",
       "available": true
     },
@@ -287,12 +386,14 @@
     "CADILLA",
     "CIPLA",
     "ELDER",
+    "IHL",
     "INDSERIES",
     "LABORATE",
     "MAPRO",
     "MICRO",
     "NOVALAB",
     "PCI",
+    "PRIME MANKIND",
     "TROIKAA",
     "ZYDUS"
   ],
@@ -314,6 +415,7 @@
   "compositions": [
     "AMIKACIN 250",
     "AMIKACIN 500",
+    "AMLODIPINE & ATENOLOL",
     "AMOXICILIN 1.2GM",
     "AMOXICILIN 228MG",
     "AMOXICILIN 250MG",
