@@ -9,6 +9,7 @@
     "build": "tsc -b && vite build",
     "build:sites": "npm run build && node scripts/build-sites-server.mjs",
     "catalogue:push": "powershell -ExecutionPolicy Bypass -File scripts/push-catalogue-update.ps1",
+    "category-images:seed": "node scripts/seed-category-images.mjs",
     "preview": "vite preview",
     "grant-admin": "node scripts/grant-admin.mjs",
     "lint": "eslint .",

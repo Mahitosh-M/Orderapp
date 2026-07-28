@@ -1,23 +1,53 @@
+import { useEffect, useState } from 'react'
 import { ArrowRight, Boxes, Layers3 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { EmptyState } from '../components/common/EmptyState'
 import { ErrorState } from '../components/common/ErrorState'
 import { LoadingState } from '../components/common/LoadingState'
 import { useCatalogue } from '../hooks/useCatalogue'
+import { loadCategoryImages, type CategoryImageMap } from '../services/categoryImageService'
 import type { CataloguePayload } from '../types/product'
 
-const categoryImages: Record<string, string> = {
-  antibiotics: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=900&q=80',
-  fever: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?auto=format&fit=crop&w=900&q=80',
+const categoryImages: Record<string, string[]> = {
+  'allergy & cough & cold': ['/category-images/allergy,cough & cold.jpg'],
+  antibiotics: ['/category-images/ANTIBIOTICS.jpg'],
+  'antifungal & skin': ['/category-images/antifungal and skin.jpg'],
+  'antispectics & disinfectants': ['/category-images/ANTISEPTICS.jpg'],
+  'e/e drops': ['/category-images/EYE AND EAR DROPS.jpg'],
+  gastrointestinal: ['/category-images/gastrointestinal.jpg'],
+  'health suppliments': ['/category-images/HEALTH SUPPLIMENTSS.jpg'],
+  'heart + bp + sugar': ['/category-images/heart+bp+sugar.jpg'],
+  'iv fluids': ['/category-images/iv fluids.jpg'],
+  'painkillers & fever': ['/category-images/painkiller and fever.jpg'],
+  respules: ['/category-images/respules.jpg'],
+  'steroids / hormone': ['/category-images/steroids.jpg'],
+  surgicals: ['/category-images/surgicals.jpg'],
 }
 
-const fallbackCategoryImage = 'https://images.unsplash.com/photo-1576671081837-49000212a370?auto=format&fit=crop&w=900&q=80'
+const fallbackCategoryImages = ['/category-images/ANTIBIOTICS.jpg']
 
-function getCategoryImage(category: string) {
-  return categoryImages[category.trim().toLowerCase()] ?? fallbackCategoryImage
+function getCategoryImages(category: string, remoteImages: CategoryImageMap) {
+  const key = category.trim().toLowerCase()
+  return remoteImages[key] ?? categoryImages[key] ?? fallbackCategoryImages
 }
 
 export function CategoryCards({ catalogue }: { catalogue: CataloguePayload }) {
+  const [remoteImages, setRemoteImages] = useState<CategoryImageMap>({})
+
+  useEffect(() => {
+    let ignore = false
+    loadCategoryImages()
+      .then((images) => {
+        if (!ignore) setRemoteImages(images)
+      })
+      .catch(() => {
+        if (!ignore) setRemoteImages({})
+      })
+    return () => {
+      ignore = true
+    }
+  }, [])
+
   const categoryRows = catalogue.categories
     .map((category) => {
       const products = catalogue.products.filter((product) => product.category === category)
@@ -37,7 +67,11 @@ export function CategoryCards({ catalogue }: { catalogue: CataloguePayload }) {
     <div className="category-card-grid">
       {categoryRows.map((row) => (
         <Link className="category-card" key={row.category} to={`/categories/${encodeURIComponent(row.category)}`}>
-          <span className="category-image" style={{ backgroundImage: `url(${getCategoryImage(row.category)})` }} aria-hidden="true" />
+          <span className="category-images" aria-hidden="true">
+            {getCategoryImages(row.category, remoteImages).map((image) => (
+              <span className="category-image-panel" key={image} style={{ backgroundImage: `url("${encodeURI(image)}")` }} />
+            ))}
+          </span>
           <span className="category-icon"><Boxes size={21} /></span>
           <span className="category-copy">
             <span className="category-card-head">

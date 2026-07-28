@@ -24,6 +24,11 @@ service cloud.firestore {
       allow create, update, delete: if false;
     }
 
+    match /categoryImages/{imageId} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
     match /orders/{orderId} {
       allow get: if true;
       allow list: if true;
