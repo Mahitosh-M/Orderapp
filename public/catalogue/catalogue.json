@@ -1,8 +1,8 @@
 {
-  "version": 13,
-  "publishedAt": "2026-07-28T11:24:36.375Z",
-  "productCount": 34,
-  "availableProductCount": 33,
+  "version": 14,
+  "publishedAt": "2026-07-29T06:19:04.198Z",
+  "productCount": 35,
+  "availableProductCount": 34,
   "products": [
     {
       "id": "PROD-000006",
@@ -375,6 +375,17 @@
       "category": "ANTIBIOTICS",
       "packing": "10 Tablets",
       "mrp": 104.34,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000035",
+      "name": "ZIMTROY-100 TAB",
+      "composition": "CEFIXIME 100MG",
+      "company": "TROIKAA",
+      "category": "ANTIBIOTICS",
+      "packing": "10 TAB",
+      "mrp": 99.64,
       "imageUrl": "",
       "available": true
     }
