@@ -33,7 +33,6 @@ export function ProductDetails() {
             </dl>
             <p className="product-composition">{product.composition}</p>
           </div>
-          <p className="rate-note">Final rate and availability will be confirmed by the supplier.</p>
           <div className="product-card-action">
             {cartItem ? (
               <QuantitySelector value={cartItem.quantity} allowZero onChange={(quantity) => updateQuantity(product.id, quantity)} />
