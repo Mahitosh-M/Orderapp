@@ -25,15 +25,13 @@ export function ProductDetails() {
           <div className="product-info">
             <div className="product-title-row">
               <h1>{product.name}</h1>
-              <span className={product.available ? 'stock-pill success' : 'stock-pill warning'}>{product.available ? 'Stock' : 'Hold'}</span>
             </div>
-            <p className="product-composition">{product.composition}</p>
             <dl className="details-grid">
               <div><dt>Company</dt><dd>{product.company}</dd></div>
-              <div><dt>Category</dt><dd>{product.category}</dd></div>
               <div><dt>Packing</dt><dd>{product.packing}</dd></div>
               <div><dt>MRP</dt><dd>{formatMrp(product.mrp)}</dd></div>
             </dl>
+            <p className="product-composition">{product.composition}</p>
           </div>
           <p className="rate-note">Final rate and availability will be confirmed by the supplier.</p>
           <div className="product-card-action">

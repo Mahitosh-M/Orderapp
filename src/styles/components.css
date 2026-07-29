@@ -172,13 +172,13 @@ dd { margin: 0; font-weight: 700; }
 .product-detail-card .product-copy { position: relative; z-index: 1; display: grid; gap: 12px; padding-right: 0; }
 .product-detail-card .product-info { display: grid; gap: 10px; padding: 2px; }
 .product-detail-card .product-card-action { position: static; width: 100%; margin-top: 0; }
-.product-detail-card .product-title-row { position: relative; padding-right: 70px; }
+.product-detail-card .product-title-row { position: relative; }
 .product-detail-card h1 { margin: 0; color: #101828; font-size: 20px; line-height: 1.18; overflow-wrap: anywhere; }
 .product-detail-card .product-composition { margin: 0; padding: 10px 12px; color: #312E81; background: #EEF2FF; border: 1px solid #C7D2FE; border-radius: 12px; font-size: 13px; font-weight: 900; -webkit-line-clamp: unset; }
-.product-detail-card .details-grid { grid-template-columns: 1fr; gap: 8px; }
-.product-detail-card .details-grid div { display: grid; gap: 3px; padding: 11px 12px; border: 1px solid #E4E7EC; border-radius: 12px; background: #F8FAFC; }
-.product-detail-card dt { color: #667085; font-size: 11px; font-weight: 900; text-transform: uppercase; }
-.product-detail-card dd { color: #101828; font-size: 14px; font-weight: 900; overflow-wrap: anywhere; }
+.product-detail-card .details-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.product-detail-card .details-grid div { display: grid; align-content: start; gap: 3px; min-width: 0; padding: 10px 8px; border: 1px solid #E4E7EC; border-radius: 12px; background: #F8FAFC; }
+.product-detail-card dt { color: #667085; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+.product-detail-card dd { color: #101828; font-size: 13px; font-weight: 900; line-height: 1.18; overflow-wrap: anywhere; }
 .product-detail-card .rate-note { margin: 0; color: #664d03; background: #FFF7D6; border: 1px solid rgba(212,160,23,.34); border-radius: 12px; font-weight: 800; }
 .product-detail-card .compact-add { min-height: 44px; }
 .timeline { display: flex; gap: 8px; flex-wrap: wrap; }
