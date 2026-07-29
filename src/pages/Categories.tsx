@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, Boxes, Layers3 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { EmptyState } from '../components/common/EmptyState'
 import { ErrorState } from '../components/common/ErrorState'
@@ -54,8 +53,6 @@ export function CategoryCards({ catalogue }: { catalogue: CataloguePayload }) {
       return {
         category,
         count: products.length,
-        available: products.filter((product) => product.available).length,
-        compositionCount: new Set(products.map((product) => product.composition).filter(Boolean)).size,
       }
     })
     .filter((row) => row.count > 0)
@@ -72,16 +69,9 @@ export function CategoryCards({ catalogue }: { catalogue: CataloguePayload }) {
               <span className="category-image-panel" key={image} style={{ backgroundImage: `url("${encodeURI(image)}")` }} />
             ))}
           </span>
-          <span className="category-icon"><Boxes size={21} /></span>
           <span className="category-copy">
-            <span className="category-card-head">
-              <strong>{row.category}</strong>
-              <small>{row.available}/{row.count}</small>
-            </span>
-            <span className="category-subline"><Layers3 size={12} />{row.compositionCount} compositions</span>
-            <span className="category-hint">Tap to view composition cards</span>
+            <strong>{row.category}</strong>
           </span>
-          <span className="category-go" aria-hidden="true"><ArrowRight size={15} /></span>
         </Link>
       ))}
     </div>
