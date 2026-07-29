@@ -38,11 +38,13 @@ export function Catalogue() {
   if (!catalogue) return <ErrorState message={error ?? 'Catalogue unavailable.'} />
   return (
     <section className="page-stack">
-      <div className="page-title-row catalogue-title-row">
-        <div>
-          <h1>Catalogue</h1>
+      {!isRouteProductPage && (
+        <div className="page-title-row catalogue-title-row">
+          <div>
+            <h1>Catalogue</h1>
+          </div>
         </div>
-      </div>
+      )}
       {offline && <ErrorState message="You are offline. Cached catalogue remains available." />}
       {error && <ErrorState message={error} />}
       {!isRouteProductPage && <ProductFilters catalogue={catalogue} query={query} setQuery={(next) => { setQuery(next); setPage(1) }} />}
@@ -52,15 +54,17 @@ export function Catalogue() {
           {visible.length < products.length && <button className="button secondary wide" onClick={() => setPage((value) => value + 1)}>Load more</button>}
         </>
       ) : null}
-      <section className="catalogue-categories-section">
-        <div className="page-title-row catalogue-title-row">
-          <div>
-            <h2>Categories</h2>
-            <p>Open a category to choose compositions.</p>
+      {!hasProductQuery && (
+        <section className="catalogue-categories-section">
+          <div className="page-title-row catalogue-title-row">
+            <div>
+              <h2>Categories</h2>
+              <p>Open a category to choose compositions.</p>
+            </div>
           </div>
-        </div>
-        <CategoryCards catalogue={catalogue} />
-      </section>
+          <CategoryCards catalogue={catalogue} />
+        </section>
+      )}
     </section>
   )
 }
