@@ -9,22 +9,22 @@ import { loadCategoryImages, type CategoryImageMap } from '../services/categoryI
 import type { CataloguePayload } from '../types/product'
 
 const categoryImages: Record<string, string[]> = {
-  'allergy & cough & cold': ['/category-images/allergy,cough & cold.jpg'],
-  antibiotics: ['/category-images/ANTIBIOTICS.jpg'],
-  'antifungal & skin': ['/category-images/antifungal and skin.jpg'],
-  'antispectics & disinfectants': ['/category-images/ANTISEPTICS.jpg'],
-  'e/e drops': ['/category-images/EYE AND EAR DROPS.jpg'],
+  'allergy & cough & cold': ['/category-images/allergy-cough-cold.jpg'],
+  antibiotics: ['/category-images/antibiotics-category.jpg'],
+  'antifungal & skin': ['/category-images/antifungal-skin.jpg'],
+  'antispectics & disinfectants': ['/category-images/antiseptics-disinfectants.jpg'],
+  'e/e drops': ['/category-images/eye-ear-drops.jpg'],
   gastrointestinal: ['/category-images/gastrointestinal.jpg'],
-  'health suppliments': ['/category-images/HEALTH SUPPLIMENTSS.jpg'],
-  'heart + bp + sugar': ['/category-images/heart+bp+sugar.jpg'],
-  'iv fluids': ['/category-images/iv fluids.jpg'],
-  'painkillers & fever': ['/category-images/painkiller and fever.jpg'],
+  'health suppliments': ['/category-images/health-suppliments.jpg'],
+  'heart + bp + sugar': ['/category-images/heart-bp-sugar.jpg'],
+  'iv fluids': ['/category-images/iv-fluids.jpg'],
+  'painkillers & fever': ['/category-images/painkillers-fever.jpg'],
   respules: ['/category-images/respules.jpg'],
-  'steroids / hormone': ['/category-images/steroids.jpg'],
+  'steroids / hormone': ['/category-images/steroids-hormone.jpg'],
   surgicals: ['/category-images/surgicals.jpg'],
 }
 
-const fallbackCategoryImages = ['/category-images/ANTIBIOTICS.jpg']
+const fallbackCategoryImages = ['/category-images/antibiotics-category.jpg']
 
 function getCategoryImages(category: string, remoteImages: CategoryImageMap) {
   const key = category.trim().toLowerCase()

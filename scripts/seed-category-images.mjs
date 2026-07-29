@@ -6,18 +6,18 @@ const projectId = process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT
 const hostingOrigin = process.env.CATEGORY_IMAGE_HOSTING_ORIGIN || 'https://orderapp-35200.web.app'
 
 const categoryImages = [
-  ['ALLERGY & COUGH & COLD', 'allergy-cough-cold', 'allergy,cough & cold.jpg'],
-  ['ANTIBIOTICS', 'antibiotics', 'ANTIBIOTICS.jpg'],
-  ['ANTIFUNGAL & SKIN', 'antifungal-skin', 'antifungal and skin.jpg'],
-  ['ANTISPECTICS & DISINFECTANTS', 'antiseptics-disinfectants', 'ANTISEPTICS.jpg'],
-  ['E/E DROPS', 'eye-ear-drops', 'EYE AND EAR DROPS.jpg'],
+  ['ALLERGY & COUGH & COLD', 'allergy-cough-cold', 'allergy-cough-cold.jpg'],
+  ['ANTIBIOTICS', 'antibiotics', 'antibiotics-category.jpg'],
+  ['ANTIFUNGAL & SKIN', 'antifungal-skin', 'antifungal-skin.jpg'],
+  ['ANTISPECTICS & DISINFECTANTS', 'antiseptics-disinfectants', 'antiseptics-disinfectants.jpg'],
+  ['E/E DROPS', 'eye-ear-drops', 'eye-ear-drops.jpg'],
   ['GASTROINTESTINAL', 'gastrointestinal', 'gastrointestinal.jpg'],
-  ['HEALTH SUPPLIMENTS', 'health-suppliments', 'HEALTH SUPPLIMENTSS.jpg'],
-  ['HEART + BP + SUGAR', 'heart-bp-sugar', 'heart+bp+sugar.jpg'],
-  ['IV FLUIDS', 'iv-fluids', 'iv fluids.jpg'],
-  ['PAINKILLERS & FEVER', 'painkillers-fever', 'painkiller and fever.jpg'],
+  ['HEALTH SUPPLIMENTS', 'health-suppliments', 'health-suppliments.jpg'],
+  ['HEART + BP + SUGAR', 'heart-bp-sugar', 'heart-bp-sugar.jpg'],
+  ['IV FLUIDS', 'iv-fluids', 'iv-fluids.jpg'],
+  ['PAINKILLERS & FEVER', 'painkillers-fever', 'painkillers-fever.jpg'],
   ['RESPULES', 'respules', 'respules.jpg'],
-  ['STEROIDS / HORMONE', 'steroids-hormone', 'steroids.jpg'],
+  ['STEROIDS / HORMONE', 'steroids-hormone', 'steroids-hormone.jpg'],
   ['SURGICALS', 'surgicals', 'surgicals.jpg'],
 ]
 

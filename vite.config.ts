@@ -22,7 +22,10 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,webp,svg,json}'],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/catalogue/') || url.pathname.startsWith('/offers/'),
