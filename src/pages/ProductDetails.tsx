@@ -18,7 +18,9 @@ export function ProductDetails() {
     <section className="details-page">
       <Link className="text-link" to="/catalogue"><ArrowLeft size={17} />Back to catalogue</Link>
       <article className="product-card product-detail-card">
-        <ProductImage src={product.imageUrl} alt={product.name} />
+        <div className="product-detail-media">
+          <ProductImage src={product.imageUrl} alt={product.name} />
+        </div>
         <div className="product-copy">
           <div className="product-info">
             <div className="product-title-row">

@@ -19,9 +19,9 @@ function Logo({ label, isStaff }: { label: string; isStaff: boolean }) {
 export function AppHeader() {
   const { totalQuantity } = useCart()
   const { offline } = useCatalogue()
-  const { customerName, isStaff, returnUrl } = useLaunch()
+  const { isStaff, returnUrl } = useLaunch()
   const navigate = useNavigate()
-  const headerName = isStaff ? 'Staff' : customerName || 'Customer'
+  const headerName = isStaff ? 'Staff' : 'Catalogue'
 
   return (
     <header className="app-header">
