@@ -1,7 +1,7 @@
 import { createContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { CustomerProfile } from '../types/customer'
 
-export type LaunchRole = 'customer' | 'staff'
+export type LaunchRole = 'customer' | 'medical' | 'staff'
 
 export interface LaunchSession {
   uid: string
@@ -31,9 +31,9 @@ interface LaunchContextValue {
 export const LaunchContext = createContext<LaunchContextValue | undefined>(undefined)
 
 const storageKey = 'partner-order-launch-session'
-function parseRole(value: string | null): LaunchRole | null {
+export function parseLaunchRole(value: string | null): LaunchRole | null {
   const normalized = value?.trim().toLowerCase()
-  if (normalized === 'customer' || normalized === 'staff') return normalized
+  if (normalized === 'customer' || normalized === 'medical' || normalized === 'staff') return normalized
   return null
 }
 
@@ -55,7 +55,7 @@ function loadStoredSession(): LaunchSession | null {
     const stored = window.sessionStorage.getItem(storageKey)
     if (!stored) return null
     const parsed = JSON.parse(stored) as Partial<LaunchSession>
-    const role = parseRole(parsed.role ?? null)
+    const role = parseLaunchRole(parsed.role ?? null)
     if (!role || !parsed.customerName || !parsed.uid || !parsed.profile) return null
     return {
       uid: parsed.uid,
@@ -96,7 +96,7 @@ export function LaunchProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const name = (params.get('name') ?? params.get('customerName') ?? params.get('userName'))?.trim()
-    const role = parseRole(params.get('role'))
+    const role = parseLaunchRole(params.get('role'))
     const customerId = (params.get('customerId') ?? params.get('customerID') ?? params.get('id') ?? name)?.trim()
     const area = (params.get('area') ?? params.get('customerArea') ?? '')?.trim()
     const returnUrl = parseReturnUrl(params.get('returnUrl'))
@@ -105,11 +105,6 @@ export function LaunchProvider({ children }: { children: ReactNode }) {
 
     if (!name || !role) {
       setError('Missing name or role launch parameter.')
-      return
-    }
-
-    if (role !== 'customer' && role !== 'staff') {
-      setError('Ordering App can only be opened by customer or staff.')
       return
     }
 
@@ -140,7 +135,7 @@ export function LaunchProvider({ children }: { children: ReactNode }) {
       role: session?.role ?? null,
       returnUrl: session?.returnUrl ?? parseReturnUrl(null),
       isStaff: session?.role === 'staff',
-      isCustomer: session?.role === 'customer',
+      isCustomer: session?.role === 'customer' || session?.role === 'medical',
       loading,
       error,
     }),

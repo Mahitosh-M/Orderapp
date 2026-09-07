@@ -1,4 +1,4 @@
-export type UserRole = 'customer' | 'staff'
+export type UserRole = 'customer' | 'medical' | 'staff'
 
 export interface CustomerProfile {
   uid: string

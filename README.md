@@ -44,14 +44,16 @@ Ordering App is intended to be opened from `https://cisapp-236ab.web.app/` with 
 
 ```text
 https://orderapp-35200.web.app/?name=CUSTOMER_OR_STAFF_NAME&role=customer
+https://orderapp-35200.web.app/?name=MEDICAL_NAME&role=medical
 https://orderapp-35200.web.app/?name=STAFF_NAME&role=staff
 ```
 
-The app accepts `name`, `customerName`, or `userName` for the display name. The `role` value must be `customer` or `staff`.
+The app accepts `name`, `customerName`, or `userName` for the display name. The `role` value must be `customer`, `medical`, or `staff`.
 
 Launches with parameters are accepted only when the browser referrer is `cisapp-236ab.web.app`. After a valid launch, the session is stored in `sessionStorage` so in-app navigation and refreshes continue without repeating the launch parameters.
 
 - `customer` opens the mobile-first ordering experience and uses `customerName` in the customer UI.
+- `medical` opens the same ordering experience as a customer and preserves the Medical launch role.
 - `staff` opens `/staff/orders` and only exposes order-management navigation.
 
 ## Catalogue

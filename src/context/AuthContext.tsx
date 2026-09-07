@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value = useMemo(
-    () => ({ user, customer, loading, login, logout, isStaff: customer?.role === 'staff', isCustomer: customer?.role === 'customer', authError }),
+    () => ({ user, customer, loading, login, logout, isStaff: customer?.role === 'staff', isCustomer: customer?.role === 'customer' || customer?.role === 'medical', authError }),
     [user, customer, loading, login, logout, authError],
   )
 
