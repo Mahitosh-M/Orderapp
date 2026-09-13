@@ -27,7 +27,20 @@ const fallbackCategoryImages = ['/category-images/antibiotics-category.jpg']
 
 function getCategoryImages(category: string, remoteImages: CategoryImageMap) {
   const key = category.trim().toLowerCase()
-  return remoteImages[key] ?? categoryImages[key] ?? fallbackCategoryImages
+  return remoteImages[key]?.length ? remoteImages[key] : categoryImages[key] ?? fallbackCategoryImages
+}
+
+function CategoryImage({ source, fallback }: { source: string; fallback: string }) {
+  const candidates = [...new Set([source, fallback, fallbackCategoryImages[0]])]
+  const [attempt, setAttempt] = useState(0)
+  return (
+    <span className="category-image-panel">
+      {attempt < candidates.length ? (
+        <img src={candidates[attempt]} alt="" decoding="async"
+          onError={() => setAttempt((current) => current + 1)} />
+      ) : <span className="category-image-unavailable">Image unavailable</span>}
+    </span>
+  )
 }
 
 export function CategoryCards({ catalogue }: { catalogue: CataloguePayload }) {
@@ -63,10 +76,11 @@ export function CategoryCards({ catalogue }: { catalogue: CataloguePayload }) {
   return (
     <div className="category-card-grid">
       {categoryRows.map((row) => (
-        <Link className="category-card" key={row.category} to={`/categories/${encodeURIComponent(row.category)}`}>
+        <Link className="category-card category-card--image" key={row.category} to={`/categories/${encodeURIComponent(row.category)}`}>
           <span className="category-images" aria-hidden="true">
             {getCategoryImages(row.category, remoteImages).map((image) => (
-              <span className="category-image-panel" key={image} style={{ backgroundImage: `url("${encodeURI(image)}")` }} />
+              <CategoryImage key={image} source={image}
+                fallback={categoryImages[row.category.trim().toLowerCase()]?.[0] ?? fallbackCategoryImages[0]} />
             ))}
           </span>
           <span className="category-copy">
