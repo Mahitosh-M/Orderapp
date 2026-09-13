@@ -1,3 +1,15 @@
+import { assertUserInput } from '../inputSecurity';
+function validateItemFields(items: CartItem[]) {
+  for (const item of items) {
+    if (!item || typeof item !== 'object' || Object.keys(item).some(key => !['productId','productName','composition','company','category','packing','mrp','imageUrl','quantity','requestedQuantity'].includes(key))) throw new Error('Unsupported order item fields.');
+    for (const key of ['productId','productName','composition','company','category','packing','imageUrl'] as const) {
+      if (typeof item[key] !== 'string' || item[key].length > (key === 'imageUrl' ? 2048 : 500)) throw new Error('Invalid order item text.');
+    }
+    if (!item.productId.trim() || !item.productName.trim() || !Number.isFinite(item.mrp) || item.mrp < 0 || item.mrp > 1e8) throw new Error('Invalid product or MRP.');
+    if (item.requestedQuantity !== undefined && (!Number.isInteger(item.requestedQuantity) || item.requestedQuantity < 1 || item.requestedQuantity > MAX_CART_QUANTITY)) throw new Error('Invalid requested quantity.');
+  }
+}
+
 import type { CataloguePayload, Product } from '../types/product'
 import type { CartItem } from '../types/order'
 import { MAX_CART_QUANTITY } from './constants'
@@ -40,6 +52,9 @@ export function hasForbiddenSellingFields(value: unknown) {
 }
 
 export function validateCartItems(items: CartItem[]) {
+  assertUserInput(items);
+  if (!Array.isArray(items) || items.length > 100) throw new Error('An order can contain at most 100 products.');
+  validateItemFields(items);
   if (items.length === 0) throw new Error('Your cart is empty.')
   for (const item of items) {
     if (!Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > MAX_CART_QUANTITY) {
@@ -49,6 +64,9 @@ export function validateCartItems(items: CartItem[]) {
 }
 
 export function validateStaffOrderItems(items: CartItem[]) {
+  assertUserInput(items);
+  if (!Array.isArray(items) || items.length > 100) throw new Error('An order can contain at most 100 products.');
+  validateItemFields(items);
   if (items.length === 0) throw new Error('Order has no items.')
   for (const item of items) {
     if (!Number.isInteger(item.quantity) || item.quantity < 0 || item.quantity > MAX_CART_QUANTITY) {

@@ -1,0 +1,19 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@source "./components/ui";
+
+/* Preflight is intentionally omitted to preserve the existing forms and tables. */
+:root { --app-page-background: transparent; }
+body { background: radial-gradient(125% 125% at 50% 10%, #000 40%, #63e 100%); background-attachment: fixed; }
+#root { isolation: isolate; background: transparent; }
+.app-gradient-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.app-gradient-layer > div { height: 100%; min-height: 100dvh; }
+.app-shell, .app-frame, .application-shell, .login-page, .boot-screen { background: transparent; }
+.app-main .page-title-row h1, .app-main .page-title-row h2,
+.app-main .page-title-row p, .app-main > .page-stack > h1,
+.app-main > .page-stack > .text-link { color: #f3efff; }
+@media print {
+  .app-gradient-layer { display: none; }
+  body { background: #fff; }
+}

@@ -1,3 +1,4 @@
+import { assertLoginInput } from "../inputSecurity";
 import { doc, getDoc } from 'firebase/firestore'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth'
 import type { CustomerProfile } from '../types/customer'
@@ -5,6 +6,7 @@ import { withLoginRateLimit } from '../utils/loginRateLimit'
 import { getFirebaseServices } from './firebase'
 
 export async function loginWithEmail(email: string, password: string) {
+  assertLoginInput(email, password);
   const { auth } = getFirebaseServices()
   const normalizedEmail = email.trim().toLowerCase()
   const credential = await withLoginRateLimit(normalizedEmail, () =>

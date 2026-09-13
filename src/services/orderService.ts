@@ -1,3 +1,4 @@
+import { assertUserInput } from "../inputSecurity";
 import {
   addDoc,
   collection,
@@ -24,6 +25,8 @@ export function createOrderNumber(date = new Date()) {
 }
 
 export function createOrderPayload(customer: CustomerProfile, items: CartItem[], draft: OrderDraft) {
+  assertUserInput({ items, draft });
+  if (!['bus', 'home', 'shop'].includes(draft.deliveryPreference) || typeof draft.customerNote !== 'string' || draft.customerNote.length > 2000) throw new Error('Invalid delivery preference or note (maximum 2000 characters).');
   validateCartItems(items)
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
   return {
@@ -90,6 +93,7 @@ export async function getStaffOrders() {
 }
 
 export async function updateStaffOrderItems(id: string, items: CartItem[]) {
+  assertUserInput({ id, items });
   validateStaffOrderItems(items)
   const { db } = getFirebaseServices()
   await updateDoc(doc(db, 'orders', id), {
@@ -111,6 +115,8 @@ export async function deliverStaffOrder(id: string) {
 }
 
 export async function updateAdminOrder(id: string, status: OrderStatus, adminNote: string) {
+  assertUserInput({ id, status, adminNote });
+  if (!['pending', 'confirmed', 'delivered'].includes(status) || typeof adminNote !== 'string' || adminNote.length > 2000) throw new Error('Invalid status or note (maximum 2000 characters).');
   const { db } = getFirebaseServices()
   await updateDoc(doc(db, 'orders', id), { status, adminNote, updatedAt: serverTimestamp() })
 }

@@ -1,3 +1,4 @@
+import { AppBackground } from "@/components/ui/tailwind-css-background-snippet";
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -9,6 +10,7 @@ import { ToastProvider } from './context/ToastContext'
 import { App } from './App'
 import './styles/global.css'
 import './styles/components.css'
+import './background.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -18,7 +20,7 @@ createRoot(document.getElementById('root')!).render(
           <LaunchProvider>
             <CatalogueProvider>
               <CartProvider>
-                <App />
+                <AppBackground /><App />
               </CartProvider>
             </CatalogueProvider>
           </LaunchProvider>

@@ -1,9 +1,10 @@
-import { BadgeIndianRupee, PackageCheck, ShoppingCart } from 'lucide-react'
+﻿import { PackageCheck, ShoppingCart, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Product } from '../../types/product'
 import { formatMrp } from '../../utils/formatting'
 import { useCart } from '../../hooks/useCart'
 import { useCatalogue } from '../../hooks/useCatalogue'
+import { InteractiveProductCard } from '../ui/card-7'
 import { ProductImage } from './ProductImage'
 import { QuantitySelector } from './QuantitySelector'
 
@@ -13,71 +14,57 @@ export function ProductCard({ product, relatedSearchTerm = '' }: { product: Prod
   const cartItem = items.find((item) => item.productId === product.id)
   const hasExactSearchMatch = relatedSearchTerm.trim().toLowerCase() === product.name.trim().toLowerCase()
   const hasSearchContext = Boolean(relatedSearchTerm.trim())
+  const selectedProductIds = new Set(items.map((item) => item.productId))
   const relatedProducts = hasExactSearchMatch || (cartItem && hasSearchContext)
     ? (catalogue?.products ?? [])
-      .filter((item) => item.id !== product.id && item.available && item.composition.trim().toLowerCase() === product.composition.trim().toLowerCase())
+      .filter((item) => item.id !== product.id && !selectedProductIds.has(item.id) && item.available && item.composition.trim().toLowerCase() === product.composition.trim().toLowerCase())
       .slice(0, 12)
     : []
 
+  const renderCard = (item: Product, suggestion = false) => {
+    const itemInCart = items.find((entry) => entry.productId === item.id)
+    return (
+      <InteractiveProductCard
+        key={item.id}
+        className={suggestion ? 'interactive-product-card--suggestion' : undefined}
+        imageUrl={item.imageUrl}
+        title={item.name}
+        description={item.composition}
+        price={formatMrp(item.mrp)}
+        role="group"
+        aria-label={item.name}
+        titleContent={<Link to={`/catalogue/${item.id}`}>{item.name}</Link>}
+        media={<Link to={`/catalogue/${item.id}`}><ProductImage key={item.imageUrl} src={item.imageUrl} alt={item.name} /></Link>}
+        badge={
+          <span className={`interactive-product-card__stock ${item.available ? 'is-available' : 'is-unavailable'}`}
+            title={item.available ? 'Available' : 'Unavailable'} aria-label={item.available ? 'Available' : 'Unavailable'}>
+            <PackageCheck size={12} aria-hidden="true" />{item.available ? 'Stock' : 'Hold'}
+          </span>
+        }
+        metadata={<><span>{item.company}</span><span>{item.packing}</span></>}
+        actions={itemInCart ? (
+          <QuantitySelector value={itemInCart.quantity} allowZero onChange={(quantity) => updateQuantity(item.id, quantity)} />
+        ) : (
+          <button className="button primary compact-add" type="button" disabled={!item.available}
+            aria-label={`Add ${item.name} to cart`} onClick={() => addProduct(item, 1)}>
+            <ShoppingCart size={17} aria-hidden="true" />Add
+          </button>
+        )}
+      />
+    )
+  }
+
   return (
-    <article className="product-card">
-      <Link to={`/catalogue/${product.id}`} className="product-link">
-        <ProductImage src={product.imageUrl} alt={product.name} />
-      </Link>
-      <div className="product-copy">
-        <div className="product-info">
-          <div className="product-title-row">
-            <h3><Link to={`/catalogue/${product.id}`}>{product.name}</Link></h3>
-            <span className={product.available ? 'stock-pill success' : 'stock-pill warning'} title={product.available ? 'Available' : 'Unavailable'} aria-label={product.available ? 'Available' : 'Unavailable'}>
-              <PackageCheck size={12} />
-              {product.available ? 'Stock' : 'Hold'}
-            </span>
+    <article className="product-card-group">
+      {renderCard(product)}
+      {relatedProducts.length > 0 && (
+        <section className="product-card-suggestions" aria-label={`Similar ${product.composition} products`}>
+          <p className="product-card-suggestions__heading"><Sparkles size={14} aria-hidden="true" />Similar products</p>
+          <div className="product-card-suggestions__list">
+            {relatedProducts.map((item) => renderCard(item, true))}
           </div>
-          <p className="product-composition">{product.composition}</p>
-          <div className="product-meta-grid">
-            <span>{product.company}</span>
-            <span>{product.packing}</span>
-            <strong><BadgeIndianRupee size={13} />{formatMrp(product.mrp)}</strong>
-          </div>
-        </div>
-        <div className="product-card-action">
-          {cartItem ? (
-            <QuantitySelector value={cartItem.quantity} allowZero onChange={(quantity) => updateQuantity(product.id, quantity)} />
-          ) : (
-            <button className="button primary compact-add" disabled={!product.available} onClick={() => addProduct(product, 1)}>
-              <ShoppingCart size={18} />
-              Add
-            </button>
-          )}
-        </div>
-      </div>
-      {relatedProducts.length > 0 ? (
-        <div className="related-products-row" aria-label={`Similar ${product.composition} products`}>
-          {relatedProducts.map((item) => {
-            const relatedCartItem = items.find((cartEntry) => cartEntry.productId === item.id)
-            return (
-              <article className="related-product-tile" key={item.id}>
-                <Link to={`/catalogue/${item.id}`} className="related-product-image-link">
-                  <ProductImage src={item.imageUrl} alt={item.name} />
-                </Link>
-                <span>
-                  <strong><Link to={`/catalogue/${item.id}`}>{item.name}</Link></strong>
-                  <small>{item.company} - {formatMrp(item.mrp)}</small>
-                </span>
-                <div className="related-product-action">
-                  {relatedCartItem ? (
-                    <QuantitySelector value={relatedCartItem.quantity} allowZero onChange={(quantity) => updateQuantity(item.id, quantity)} />
-                  ) : (
-                    <button className="button primary compact-add" type="button" onClick={() => addProduct(item, 1)}>
-                      <ShoppingCart size={14} />
-                    </button>
-                  )}
-                </div>
-              </article>
-            )
-          })}
-        </div>
-      ) : null}
+        </section>
+      )}
     </article>
   )
 }

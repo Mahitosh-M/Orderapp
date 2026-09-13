@@ -7,3 +7,16 @@ dist/
 firebase-debug.log
 npm-debug.log*
 coverage/
+
+# Local configuration and private credentials
+.env
+.env.*
+!.env.example
+*-debug.log*
+*.pem
+*.key
+*.p12
+*.pfx
+**/*service-account*.json
+**/*serviceAccount*.json
+**/credentials.json
