@@ -1,11 +1,15 @@
 import { doc, getDoc } from 'firebase/firestore'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth'
 import type { CustomerProfile } from '../types/customer'
+import { withLoginRateLimit } from '../utils/loginRateLimit'
 import { getFirebaseServices } from './firebase'
 
 export async function loginWithEmail(email: string, password: string) {
   const { auth } = getFirebaseServices()
-  const credential = await signInWithEmailAndPassword(auth, email, password)
+  const normalizedEmail = email.trim().toLowerCase()
+  const credential = await withLoginRateLimit(normalizedEmail, () =>
+    signInWithEmailAndPassword(auth, normalizedEmail, password),
+  )
   return credential.user
 }
 
