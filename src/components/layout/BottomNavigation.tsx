@@ -1,9 +1,10 @@
-import { ListOrdered, PackageSearch, ShieldCheck } from 'lucide-react'
+import { Home, ListOrdered, PackageSearch, ShieldCheck } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useLaunch } from '../../hooks/useLaunch'
 
 const items = [
-  { to: '/', label: 'Catalogue', icon: PackageSearch },
+  { to: '/', label: 'Home', icon: Home },
+  { to: '/catalogue', label: 'Catalogue', icon: PackageSearch },
   { to: '/orders', label: 'Orders', icon: ListOrdered },
 ]
 

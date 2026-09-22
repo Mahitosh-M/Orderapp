@@ -21,7 +21,7 @@ export function AppHeader() {
   const { offline } = useCatalogue()
   const { isStaff, returnUrl } = useLaunch()
   const navigate = useNavigate()
-  const headerName = isStaff ? 'Staff' : 'Catalogue'
+  const headerName = isStaff ? 'Staff' : 'Order'
 
   return (
     <header className="app-header">
@@ -31,7 +31,8 @@ export function AppHeader() {
           <NavLink to="/staff/orders"><ClipboardList size={16} />Orders</NavLink>
         ) : (
           <>
-            <NavLink to="/" end>Catalogue</NavLink>
+            <NavLink to="/" end>Home</NavLink>
+            <NavLink to="/catalogue">Catalogue</NavLink>
             <NavLink to="/orders">Orders</NavLink>
           </>
         )}
