@@ -14,7 +14,7 @@ export function BottomNavigation() {
   if (isStaff) {
     return (
       <nav className="bottom-nav admin-bottom-nav" aria-label="Staff">
-        <NavLink to="/staff/orders">
+        <NavLink to="/staff/orders" className={({ isActive }) => isActive ? 'active' : undefined}>
           <ShieldCheck size={20} />
           <span>Orders</span>
         </NavLink>
@@ -25,7 +25,7 @@ export function BottomNavigation() {
   return (
     <nav className="bottom-nav" aria-label="Primary">
       {items.map(({ to, label, icon: Icon }) => (
-        <NavLink key={to} to={to} end={to === '/'}>
+        <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => isActive ? 'active' : undefined}>
           <Icon size={20} />
           <span>{label}</span>
         </NavLink>
