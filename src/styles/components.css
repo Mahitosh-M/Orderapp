@@ -134,6 +134,7 @@ textarea { min-height: 100px; resize: vertical; }
   [src*="/category-images/painkillers-fever.jpg"],
   [src*="/category-images/respules.jpg"]
 ) { transform: scale(1.4); }
+.category-card--image .category-image-panel img[src*="/category-images/antifungal-skin.jpg"] { transform: scale(1.62); object-position: center 54%; }
 .category-image-unavailable { display: grid; place-items: center; height: 100%; color: #e2e8f0; font-size: 13px; }
 .category-copy { position: relative; z-index: 3; display: flex; justify-content: center; width: 100%; padding: 0 12px 14px; }
 .category-copy strong { display: inline-flex; align-items: center; justify-content: center; max-width: 100%; min-height: 38px; padding: 8px 13px; color: #FFE08A; background: rgba(0,0,0,.86); border: 1px solid rgba(212,160,23,.74); border-radius: 10px; box-shadow: 0 10px 22px rgba(0,0,0,.28); font-size: 16px; font-weight: 950; line-height: 1.12; text-align: center; overflow-wrap: anywhere; text-transform: uppercase; }
