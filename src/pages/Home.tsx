@@ -1,6 +1,6 @@
 import { ArrowRight, ClipboardList, Search, ShoppingBag, Sparkles } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CoverflowCarousel, type CoverflowSlide } from '../components/ui/coverflow-carousel'
 import { ErrorState } from '../components/common/ErrorState'
 import { LoadingState } from '../components/common/LoadingState'
@@ -20,6 +20,8 @@ type HomeSlide = CoverflowSlide & { category: string }
 export function Home() {
   const { catalogue, loading, error, offline } = useCatalogue()
   const [selected, setSelected] = useState(0)
+  const [search, setSearch] = useState('')
+  const navigate = useNavigate()
   const slides = useMemo<HomeSlide[]>(() => catalogue?.categories.map((category) => {
     const count = catalogue.products.filter((product) => product.category === category).length
     return { category, src: categoryArtwork[category.trim().toLowerCase()] ?? '/category-images/antibiotics-category.jpg', alt: `${category} medicines`, title: category, subtitle: `${count} products available` }
@@ -28,13 +30,24 @@ export function Home() {
   if (loading) return <LoadingState label="Preparing your home page" />
   if (!catalogue) return <ErrorState message={error ?? 'Catalogue unavailable.'} />
   const active = slides[selected] ?? slides[0]
+  const openSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const value = search.trim()
+    navigate(value ? `/catalogue?search=${encodeURIComponent(value)}` : '/catalogue')
+  }
 
   return <section className="order-home page-stack">
     <div className="home-hero">
       <span className="home-kicker"><Sparkles size={14} /> QUICK & SIMPLE ORDERING</span>
       <h1>What do you need today?</h1>
       <p>Browse trusted products by category or search the complete catalogue.</p>
-      <Link className="home-search-link" to="/catalogue"><Search size={19} /><span>Search medicines and products</span><ArrowRight size={18} /></Link>
+      <form className="home-search-form" onSubmit={openSearch}>
+        <label className="home-search-field search-field">
+          <Search size={19} aria-hidden="true" />
+          <span className="sr-only">Search medicines and products</span>
+          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search medicines and products" />
+        </label>
+      </form>
     </div>
     {offline && <ErrorState message="You are offline. Cached categories remain available." />}
     {error && <ErrorState message={error} />}

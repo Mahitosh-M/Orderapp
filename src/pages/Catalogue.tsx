@@ -15,9 +15,10 @@ const defaultQuery: ProductQuery = { search: '', company: '', category: '', comp
 export function Catalogue() {
   const { catalogue, loading, error, offline } = useCatalogue()
   const [searchParams] = useSearchParams()
+  const selectedSearch = searchParams.get('search') ?? ''
   const selectedCategory = searchParams.get('category') ?? ''
   const selectedComposition = searchParams.get('composition') ?? ''
-  const [query, setQuery] = useState(defaultQuery)
+  const [query, setQuery] = useState(() => ({ ...defaultQuery, search: selectedSearch }))
   const [page, setPage] = useState(1)
   const debouncedSearch = useDebounce(query.search)
   const hasSearch = Boolean(debouncedSearch.trim())
@@ -34,6 +35,10 @@ export function Catalogue() {
   useEffect(() => {
     setPage(1)
   }, [selectedCategory, selectedComposition])
+  useEffect(() => {
+    setQuery((current) => current.search === selectedSearch ? current : { ...current, search: selectedSearch })
+    setPage(1)
+  }, [selectedSearch])
   if (loading) return <LoadingState label="Loading catalogue" />
   if (!catalogue) return <ErrorState message={error ?? 'Catalogue unavailable.'} />
   return (
