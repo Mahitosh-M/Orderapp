@@ -3,7 +3,7 @@ import { LogIn } from 'lucide-react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { ErrorState } from '../components/common/ErrorState'
-import { isFirebaseConfigured, missingFirebaseVars } from '../services/firebase'
+import { isFirebaseConfigured } from '../services/firebase'
 
 export function Login() {
   const { login, user, customer, authError } = useAuth()
@@ -33,7 +33,7 @@ export function Login() {
       <section className="login-panel">
         <div className="logo login-logo"><span className="logo-mark">PO</span><span>Partner Order</span></div>
         <h1>Customer Login</h1>
-        {!isFirebaseConfigured() && <ErrorState message={`Firebase is not configured. Missing ${missingFirebaseVars.join(', ')}.`} />}
+        {!isFirebaseConfigured() && <ErrorState message="Login is temporarily unavailable. Please contact the supplier." />}
         {(error || authError) && <ErrorState message={error ?? authError ?? ''} />}
         <form onSubmit={submit}>
           <label>Email<input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>

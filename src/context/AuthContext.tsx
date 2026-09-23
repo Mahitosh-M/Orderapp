@@ -19,10 +19,12 @@ export const AuthContext = createContext<AuthContextValue | undefined>(undefined
 
 function friendlyAuthError(error: unknown) {
   const code = error && typeof error === 'object' && 'code' in error ? String((error as { code: unknown }).code) : ''
+  const message = error instanceof Error ? error.message : ''
   if (code.includes('invalid-credential')) return 'Invalid email or password.'
   if (code.includes('user-disabled')) return 'This account is disabled. Contact the supplier.'
-  if (code.includes('permission-denied')) return 'You do not have permission to access this data.'
-  return error instanceof Error ? error.message : 'Authentication failed.'
+  if (code.includes('too-many-requests') || message.startsWith('Too many login attempts.')) return message.startsWith('Too many login attempts.') ? message : 'Too many login attempts. Please try again later.'
+  if (code.includes('permission-denied')) return 'Your account cannot access this app. Contact the supplier.'
+  return 'Unable to sign in. Check your email and password, then try again.'
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
