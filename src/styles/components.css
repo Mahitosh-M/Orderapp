@@ -45,6 +45,10 @@
 .home-section-heading h2 { margin: 2px 0 0; font-size: 20px; }
 .home-section-heading > svg { color: var(--gold); }
 .home-category-button { width: calc(100% - 16px); margin: 14px 8px 0; border-radius: 14px; }
+.home-category-count-card { display: grid; place-items: center; align-content: center; width: 100%; height: 100%; padding: 18px; color: #fff; background: radial-gradient(circle at 50% 14%, #3b4252, #111827 58%, #030712); text-align: center; }
+.home-category-count-card span { color: #cbd5e1; font-size: 10px; font-weight: 900; letter-spacing: .12em; }
+.home-category-count-card strong { margin: 10px 0 3px; color: #fde68a; font-size: clamp(44px, 13vw, 64px); line-height: 1; }
+.home-category-count-card small { color: #e2e8f0; font-size: 13px; font-weight: 800; }
 .home-quick-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .home-quick-actions > a { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 9px; min-width: 0; padding: 13px 10px; color: #fff; border: 1px solid rgba(167,139,250,.34); border-radius: 18px; background: linear-gradient(135deg, #111b43, #352275); box-shadow: 0 12px 24px rgba(20,18,64,.18); }
 .home-quick-actions > a > span { display: grid; place-items: center; width: 38px; height: 38px; color: #2e1065; background: #fde68a; border-radius: 12px; }
@@ -123,7 +127,7 @@ textarea { min-height: 100px; resize: vertical; }
 .category-card--image::before { display: none; }
 .category-card--image .category-images { position: absolute; inset: 0; width: 100%; height: 100%; transform: none; background: #111827; }
 .category-card--image .category-image-panel { height: 100%; overflow: hidden; }
-.category-card--image .category-image-panel img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: center; transform: scale(1.02); }
+.category-card--image .category-image-panel img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: center; transform: scale(1.26); }
 /* These original banners contain white padding inside the files. Crop it within
    the card instead of stretching or replacing the category artwork. */
 .category-card--image .category-image-panel img:is(

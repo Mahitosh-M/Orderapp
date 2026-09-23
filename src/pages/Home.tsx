@@ -15,21 +15,25 @@ const categoryArtwork: Record<string, string> = {
   respules: '/category-images/respules.jpg', 'steroids / hormone': '/category-images/steroids-hormone.jpg', surgicals: '/category-images/surgicals.jpg',
 }
 
-type HomeSlide = CoverflowSlide & { category: string }
+type HomeSlide = CoverflowSlide & { category?: string }
 
 export function Home() {
   const { catalogue, loading, error, offline } = useCatalogue()
-  const [selected, setSelected] = useState(0)
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
-  const slides = useMemo<HomeSlide[]>(() => catalogue?.categories.map((category) => {
+  const slides = useMemo<HomeSlide[]>(() => {
+    const categorySlides = catalogue?.categories.map((category) => {
     const count = catalogue.products.filter((product) => product.category === category).length
     return { category, src: categoryArtwork[category.trim().toLowerCase()] ?? '/category-images/antibiotics-category.jpg', alt: `${category} medicines`, title: category, subtitle: `${count} products available` }
-  }).filter((slide) => !slide.subtitle.startsWith('0 ')) ?? [], [catalogue])
+    }).filter((slide) => !slide.subtitle.startsWith('0 ')) ?? []
+    return [...categorySlides, {
+      src: '', alt: `${categorySlides.length} categories available`, title: `${categorySlides.length} categories`, subtitle: 'Swipe to explore',
+      content: <div className="home-category-count-card"><span>SHOP BY CATEGORY</span><strong>{categorySlides.length}</strong><small>Categories available</small></div>,
+    }]
+  }, [catalogue])
 
   if (loading) return <LoadingState label="Preparing your home page" />
   if (!catalogue) return <ErrorState message={error ?? 'Catalogue unavailable.'} />
-  const active = slides[selected] ?? slides[0]
   const openSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const value = search.trim()
@@ -53,8 +57,10 @@ export function Home() {
     {error && <ErrorState message={error} />}
     <section className="home-category-showcase" aria-labelledby="home-categories-title">
       <div className="home-section-heading"><div><span>EXPLORE</span><h2 id="home-categories-title">Shop by category</h2></div><ShoppingBag size={24} /></div>
-      <CoverflowCarousel slides={slides} cardWidth="clamp(170px, 52vw, 245px)" showCaption showNavigation showPagination label="Medicine categories" onSelectedChange={setSelected} />
-      {active && <Link className="button primary wide home-category-button" to={`/categories/${encodeURIComponent(active.category)}`}>Open {active.category}<ArrowRight size={18} /></Link>}
+      <CoverflowCarousel slides={slides} cardWidth="clamp(170px, 52vw, 245px)" showCaption showNavigation showPagination label="Medicine categories" onSlideClick={(slide) => {
+        const categorySlide = slide as HomeSlide
+        if (categorySlide.category) navigate(`/categories/${encodeURIComponent(categorySlide.category)}`)
+      }} />
     </section>
     <div className="home-quick-actions">
       <Link to="/catalogue"><span><Search size={21} /></span><div><strong>Full catalogue</strong><small>Search every product</small></div><ArrowRight size={18} /></Link>

@@ -9,6 +9,7 @@ export interface CoverflowSlide {
   alt: string
   title?: string
   subtitle?: string
+  content?: React.ReactNode
 }
 
 interface CoverflowCarouselProps {
@@ -28,6 +29,7 @@ interface CoverflowCarouselProps {
   className?: string
   cardClassName?: string
   onSelectedChange?: (index: number) => void
+  onSlideClick?: (slide: CoverflowSlide, index: number) => void
 }
 
 export function CoverflowCarousel({
@@ -36,6 +38,7 @@ export function CoverflowCarousel({
   loop = true, showCaption = false, showPagination = false,
   showNavigation = false, label = 'Cover carousel', className, cardClassName,
   onSelectedChange,
+  onSlideClick,
 }: CoverflowCarouselProps) {
   const count = slides.length
   const frameRef = React.useRef<HTMLDivElement>(null)
@@ -45,6 +48,7 @@ export function CoverflowCarousel({
   const widthRef = React.useRef(0)
   const rafRef = React.useRef<number | null>(null)
   const dragRef = React.useRef<{ id: number; x: number; pos: number; v: number; t: number } | null>(null)
+  const draggedRef = React.useRef(false)
   const [selected, setSelected] = React.useState(0)
 
   const select = React.useCallback((index: number) => {
@@ -124,12 +128,14 @@ export function CoverflowCarousel({
             if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
             event.currentTarget.setPointerCapture(event.pointerId)
             targetRef.current = posRef.current
+            draggedRef.current = false
             dragRef.current = { id: event.pointerId, x: event.clientX, pos: posRef.current, v: 0, t: performance.now() }
           }}
           onPointerMove={(event) => {
             const drag = dragRef.current
             const pitch = widthRef.current * (1 + gap)
             if (!drag || drag.id !== event.pointerId || !pitch) return
+            if (Math.abs(event.clientX - drag.x) > 8) draggedRef.current = true
             const now = performance.now()
             const previous = posRef.current
             posRef.current = clamp(drag.pos - (event.clientX - drag.x) / pitch)
@@ -144,6 +150,7 @@ export function CoverflowCarousel({
             if (!drag || drag.id !== event.pointerId) return
             dragRef.current = null
             settle(clamp(Math.round(posRef.current + Math.max(-2, Math.min(2, drag.v * 0.18)))))
+            window.setTimeout(() => { draggedRef.current = false }, 0)
           }}
           onPointerCancel={() => { dragRef.current = null }}
           onKeyDown={(event) => {
@@ -153,9 +160,10 @@ export function CoverflowCarousel({
           <div className="relative select-none" style={{ height: 'var(--cf-card)', transformStyle: 'preserve-3d' }}>
             {slides.map((slide, index) => <div key={`${slide.src}-${index}`} ref={(node) => { cardRefs.current[index] = node }}
               role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${count}`}
+              onClick={() => { if (!draggedRef.current) onSlideClick?.(slide, index) }}
               className={cn('absolute left-1/2 top-0 aspect-square overflow-hidden rounded-2xl bg-muted shadow-xl will-change-transform', cardClassName)}
               style={{ width: 'var(--cf-card)' }}>
-              <img src={slide.src} alt={slide.alt} draggable={false} className="h-full w-full select-none object-cover" />
+              {slide.content ?? <img src={slide.src} alt={slide.alt} draggable={false} className="h-full w-full select-none object-cover" />}
             </div>)}
           </div>
         </div>
