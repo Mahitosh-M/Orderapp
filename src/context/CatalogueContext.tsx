@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { CataloguePayload } from '../types/product'
+import { getCachedCatalogue } from '../services/cacheService'
 import { loadCatalogue } from '../services/catalogueService'
 
 const autoRefreshMs = 5 * 60 * 1000
@@ -36,7 +37,17 @@ export function CatalogueProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    void runLoad(false)
+    let cancelled = false
+    const loadInitialCatalogue = async () => {
+      const cached = await getCachedCatalogue()
+      if (cached && !cancelled) {
+        setCatalogue(cached)
+        setFromCache(true)
+        setLoading(false)
+      }
+      if (!cancelled) await runLoad(false)
+    }
+    void loadInitialCatalogue()
     const syncOnline = () => {
       const isOffline = !navigator.onLine
       setOffline(isOffline)
@@ -53,6 +64,7 @@ export function CatalogueProvider({ children }: { children: ReactNode }) {
     window.addEventListener('offline', syncOnline)
     document.addEventListener('visibilitychange', refreshVisibleCatalogue)
     return () => {
+      cancelled = true
       window.clearInterval(interval)
       window.removeEventListener('online', syncOnline)
       window.removeEventListener('offline', syncOnline)
