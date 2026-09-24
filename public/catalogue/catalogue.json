@@ -1,8 +1,8 @@
 {
-  "version": 15,
-  "publishedAt": "2026-09-24T04:42:35.745Z",
-  "productCount": 54,
-  "availableProductCount": 52,
+  "version": 19,
+  "publishedAt": "2026-09-24T04:57:31.897Z",
+  "productCount": 55,
+  "availableProductCount": 53,
   "products": [
     {
       "id": "PROD-000006",
@@ -265,6 +265,17 @@
       "category": "ALLERGY & COUGH & COLD",
       "packing": "10'S",
       "mrp": 49.97,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000055",
+      "name": "DICLOKEM AQ INJ",
+      "composition": "DICLOFENAC  1ml",
+      "company": "ALKEM",
+      "category": "PAINKILLERS & FEVER",
+      "packing": "1ML",
+      "mrp": 28,
       "imageUrl": "",
       "available": true
     },
