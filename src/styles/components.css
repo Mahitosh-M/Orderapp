@@ -338,3 +338,34 @@ dd { margin: 0; font-weight: 700; }
   .app-header, .bottom-nav, .button, .text-link { display: none !important; }
   .print-area { box-shadow: none; border: 0; }
 }
+
+/* Crop source artwork inside the home carousel so every category fills its tile. */
+.home-category-card { background: #111827; }
+.home-category-card > img { transform: scale(1.28); transform-origin: center; }
+.home-category-card > img[src*="/category-images/allergy-cough-cold.jpg"],
+.home-category-card > img[src*="/category-images/gastrointestinal.jpg"],
+.home-category-card > img[src*="/category-images/heart-bp-sugar.jpg"],
+.home-category-card > img[src*="/category-images/painkillers-fever.jpg"],
+.home-category-card > img[src*="/category-images/respules.jpg"] { transform: scale(1.45); }
+.home-category-card > img[src*="/category-images/antifungal-skin.jpg"] { transform: scale(1.68); transform-origin: center 54%; }
+
+/* Keep each horizontally swiped search result at its own height when another item reveals suggestions. */
+.product-list--swipe { align-items: flex-start; }
+.product-list--swipe > .product-card-group { align-self: flex-start; }
+
+/* Keep all navigation labels visible beneath their icons. */
+.bottom-nav { min-height: 68px; align-items: stretch; }
+.bottom-nav a, .bottom-nav a.active { flex: 1 1 0; flex-direction: column; gap: 3px; min-width: 0; min-height: 56px; padding: 6px 4px; }
+.bottom-nav a span, .bottom-nav a.active span { display: block; max-width: 100%; margin-left: 0; opacity: 1; font-size: 10px; line-height: 1.1; text-align: center; }
+
+/* Use the Orderapp royal-blue and purple theme for catalogue and Home search fields. */
+.filters { background: linear-gradient(135deg, #09122d, #24135f 58%, #4c2e91); border-color: rgba(167,139,250,.46); box-shadow: 0 14px 30px rgba(25,18,70,.22); }
+.filters .search-field, .home-search-field { color: #f5f3ff; background: rgba(9,18,45,.68); border-color: rgba(196,181,253,.52); }
+.filters .search-field svg, .home-search-field svg { color: #fde68a; }
+.filters .search-field input, .home-search-field input { color: #fff; background: transparent; }
+.filters .search-field input::placeholder, .home-search-field input::placeholder { color: #ddd6fe; }
+.home-search-clear { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; color: #24135f; background: #fde68a; cursor: pointer; }
+.home-search-results { display: grid; gap: 9px; padding: 14px 10px; border: 1px solid rgba(167,139,250,.38); border-radius: 22px; background: linear-gradient(145deg, rgba(9,18,45,.96), rgba(43,26,102,.94)); box-shadow: 0 14px 30px rgba(25,18,70,.18); }
+.home-search-results-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 5px; }
+.home-search-results-heading h2 { margin: 0; color: #fff; font-size: 18px; }
+.home-search-results-heading span { padding: 5px 8px; border-radius: 999px; color: #2e1065; background: #fde68a; font-size: 11px; font-weight: 900; }

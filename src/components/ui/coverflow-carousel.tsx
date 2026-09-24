@@ -168,8 +168,8 @@ export function CoverflowCarousel({
           </div>
         </div>
         {showNavigation && <>
-          <button type="button" aria-label="Previous category" onClick={() => nudge(-1)} className="absolute left-2 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-900 shadow-lg"><ChevronLeft className="size-5" /></button>
-          <button type="button" aria-label="Next category" onClick={() => nudge(1)} className="absolute right-2 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slate-900 shadow-lg"><ChevronRight className="size-5" /></button>
+          <button type="button" aria-label="Previous category" onClick={() => nudge(-1)} className="absolute left-2 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-white/55 p-1.5 text-slate-900 opacity-45 shadow-md transition-all hover:bg-white/90 hover:opacity-100 focus-visible:bg-white/90 focus-visible:opacity-100"><ChevronLeft className="size-5" /></button>
+          <button type="button" aria-label="Next category" onClick={() => nudge(1)} className="absolute right-2 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-white/55 p-1.5 text-slate-900 opacity-45 shadow-md transition-all hover:bg-white/90 hover:opacity-100 focus-visible:bg-white/90 focus-visible:opacity-100"><ChevronRight className="size-5" /></button>
         </>}
       </div>
       {showCaption && active?.title && <div key={selected} className="mt-1 flex flex-col items-center px-6 text-center duration-300 animate-in fade-in">
