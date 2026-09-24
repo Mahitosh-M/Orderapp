@@ -1,8 +1,8 @@
 {
-  "version": 22,
-  "publishedAt": "2026-09-24T05:12:18.956Z",
-  "productCount": 56,
-  "availableProductCount": 54,
+  "version": 23,
+  "publishedAt": "2026-09-24T05:14:26.837Z",
+  "productCount": 57,
+  "availableProductCount": 55,
   "products": [
     {
       "id": "PROD-000006",
@@ -529,6 +529,17 @@
       "category": "ANTIBIOTICS",
       "packing": "1 VIAL",
       "mrp": 18.91,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000057",
+      "name": "TROFLOCIN 200 TAB",
+      "composition": "OFLOXACIN 200MG",
+      "company": "TROIKAA",
+      "category": "ANTIBIOTICS",
+      "packing": "10 TABLETS",
+      "mrp": 73.73,
       "imageUrl": "",
       "available": true
     },
