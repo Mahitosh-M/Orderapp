@@ -1,8 +1,8 @@
 {
-  "version": 23,
-  "publishedAt": "2026-09-24T05:14:26.837Z",
-  "productCount": 57,
-  "availableProductCount": 55,
+  "version": 24,
+  "publishedAt": "2026-10-08T05:49:01.989Z",
+  "productCount": 60,
+  "availableProductCount": 58,
   "products": [
     {
       "id": "PROD-000006",
@@ -29,11 +29,11 @@
     {
       "id": "PROD-000033",
       "name": "ALPAGENTA",
-      "composition": "OMEPRAZOLE CAP",
+      "composition": "GENTAMYCIN",
       "company": "ALPA LABORETORIES",
       "category": "STEROIDS / HORMONE",
       "packing": "30ML",
-      "mrp": 99.99,
+      "mrp": 49.98,
       "imageUrl": "",
       "available": true
     },
@@ -467,6 +467,28 @@
       "available": true
     },
     {
+      "id": "PROD-000060",
+      "name": "PHARMADOL 500 TAB",
+      "composition": "PARACETAMOL 500 TAB",
+      "company": "TROIKAA",
+      "category": "PAINKILLERS & FEVER",
+      "packing": "10 TABLETS",
+      "mrp": 9.46,
+      "imageUrl": "",
+      "available": true
+    },
+    {
+      "id": "PROD-000059",
+      "name": "PHARMADOL-650 TAB",
+      "composition": "PARACETAMOL 650 TAB",
+      "company": "TROIKAA",
+      "category": "PAINKILLERS & FEVER",
+      "packing": "10 TABLETS",
+      "mrp": 15.75,
+      "imageUrl": "",
+      "available": true
+    },
+    {
       "id": "PROD-000029",
       "name": "POVIDEN 10GM",
       "composition": "CEFIXIME 50MG",
@@ -555,6 +577,17 @@
       "available": true
     },
     {
+      "id": "PROD-000058",
+      "name": "TROIKAA PARA 650 TAB",
+      "composition": "PARACETAMOL 650 TAB",
+      "company": "TROIKAA",
+      "category": "PAINKILLERS & FEVER",
+      "packing": "15 TABLETS",
+      "mrp": 31.78,
+      "imageUrl": "",
+      "available": true
+    },
+    {
       "id": "PROD-000019",
       "name": "TROYPAN INJ",
       "composition": "PANTAPRAZOLE 40MG",
@@ -617,7 +650,7 @@
       "category": "ANTIBIOTICS",
       "packing": "10 Tablets",
       "mrp": 104.34,
-      "imageUrl": "",
+      "imageUrl": "https://res.cloudinary.com/dqmfmbj6t/image/upload/v1791438498/zimtroy_2000_hetiqr.jpg",
       "available": true
     },
     {
@@ -640,12 +673,14 @@
     "CADILLA",
     "CIPLA",
     "ELDER",
+    "GSK",
     "IHL",
     "INDSERIES",
     "LABORATE",
     "MAPRO",
     "MICRO",
     "NOVALAB",
+    "P&G",
     "PCI",
     "PRIME MANKIND",
     "TROIKAA",
@@ -702,6 +737,7 @@
     "DICLOFENAC  1ml",
     "DICLOFENAC 3ML",
     "DRY COUGH",
+    "ETORICOXIB",
     "GENTAMYCIN",
     "LEVOCETRIZINE 5MG",
     "LEVOFLOXACIN 250MG",
