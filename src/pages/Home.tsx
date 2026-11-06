@@ -1,5 +1,6 @@
 import { Search, ShoppingBag, Sparkles, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { loadCategoryImages, type CategoryImageMap } from '../services/categoryImageService'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CoverflowCarousel, type CoverflowSlide } from '../components/ui/coverflow-carousel'
 import { ErrorState } from '../components/common/ErrorState'
@@ -22,13 +23,19 @@ type HomeSlide = CoverflowSlide & { category?: string }
 export function Home() {
   const { catalogue, loading, error, offline } = useCatalogue()
   const [search, setSearch] = useState('')
+  const [remoteImages, setRemoteImages] = useState<CategoryImageMap>({})
+  useEffect(() => {
+    let ignore = false
+    loadCategoryImages().then(images => { if (!ignore) setRemoteImages(images) }).catch(() => {})
+    return () => { ignore = true }
+  }, [])
   const navigate = useNavigate()
   const slides = useMemo<HomeSlide[]>(() => {
     return catalogue?.categories.map((category) => {
       const count = catalogue.products.filter((product) => product.category === category).length
-      return { category, src: categoryArtwork[category.trim().toLowerCase()] ?? '/category-images/antibiotics-category.jpg', alt: `${category} medicines`, title: category, subtitle: `${count} products available` }
+      return { category, src: remoteImages[category.trim().toLowerCase()]?.[0] ?? categoryArtwork[category.trim().toLowerCase()] ?? '/category-images/antibiotics-category.jpg', alt: `${category} medicines`, title: category, subtitle: `${count} products available` }
     }).filter((slide) => !slide.subtitle.startsWith('0 ')) ?? []
-  }, [catalogue])
+  }, [catalogue, remoteImages])
   const matchingProducts = useMemo(() => {
     const value = search.trim()
     if (!catalogue || !value) return []
@@ -44,7 +51,6 @@ export function Home() {
     <div className="home-hero">
       <span className="home-kicker"><Sparkles size={14} /> QUICK & SIMPLE ORDERING</span>
       <h1>What do you need today?</h1>
-      <p>Browse trusted products by category or search the complete catalogue.</p>
       <form className="home-search-form" onSubmit={(event) => event.preventDefault()}>
         <label className="home-search-field search-field">
           <Search size={19} aria-hidden="true" />
@@ -62,7 +68,7 @@ export function Home() {
     </section>}
     <section className="home-category-showcase" aria-labelledby="home-categories-title">
       <div className="home-section-heading"><div><span>EXPLORE</span><h2 id="home-categories-title">Shop by category</h2></div><ShoppingBag size={24} /></div>
-      <CoverflowCarousel slides={slides} cardWidth="clamp(170px, 52vw, 245px)" cardClassName="home-category-card" showCaption showNavigation showPagination label="Medicine categories" onSlideClick={(slide) => {
+      <CoverflowCarousel slides={slides} cardWidth="clamp(136px, 40vw, 180px)" className="home-category-carousel" cardClassName="home-category-card" showCaption showNavigation showPagination label="Medicine categories" onSlideClick={(slide) => {
         const categorySlide = slide as HomeSlide
         if (categorySlide.category) navigate(`/categories/${encodeURIComponent(categorySlide.category)}`)
       }} />

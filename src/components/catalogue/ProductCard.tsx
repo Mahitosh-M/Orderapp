@@ -1,4 +1,5 @@
-﻿import { PackageCheck, ShoppingCart, Sparkles } from 'lucide-react'
+import { PackageCheck, ShoppingCart, Sparkles } from 'lucide-react'
+import { useId, useState, type ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import type { Product } from '../../types/product'
 import { formatMrp } from '../../utils/formatting'
@@ -8,61 +9,67 @@ import { InteractiveProductCard } from '../ui/card-7'
 import { ProductImage } from './ProductImage'
 import { QuantitySelector } from './QuantitySelector'
 
-export function ProductCard({ product, relatedSearchTerm = '' }: { product: Product; relatedSearchTerm?: string }) {
+interface ProductCardProps {
+  product: Product
+  relatedSearchTerm?: string
+  suggestion?: boolean
+  ancestorIds?: readonly string[]
+}
+
+export function ProductCard({ product, relatedSearchTerm = '', suggestion = false, ancestorIds = [] }: ProductCardProps): ReactElement {
   const { addProduct, items, updateQuantity } = useCart()
   const { catalogue } = useCatalogue()
+  const [relatedOpen, setRelatedOpen] = useState<boolean | null>(null)
+  const relatedId = useId()
   const cartItem = items.find((item) => item.productId === product.id)
   const hasExactSearchMatch = relatedSearchTerm.trim().toLowerCase() === product.name.trim().toLowerCase()
-  const hasSearchContext = Boolean(relatedSearchTerm.trim())
-  const selectedProductIds = new Set(items.map((item) => item.productId))
-  const relatedProducts = hasExactSearchMatch || (cartItem && hasSearchContext)
+  const showRelated = relatedOpen ?? (hasExactSearchMatch || Boolean(cartItem && relatedSearchTerm.trim()))
+  const excludedIds = new Set([product.id, ...ancestorIds, ...items.map((item) => item.productId)])
+  const relatedProducts = showRelated
     ? (catalogue?.products ?? [])
-      .filter((item) => item.id !== product.id && !selectedProductIds.has(item.id) && item.available && item.composition.trim().toLowerCase() === product.composition.trim().toLowerCase())
+      .filter((item) => !excludedIds.has(item.id) && item.available && item.composition.trim().toLowerCase() === product.composition.trim().toLowerCase())
       .slice(0, 12)
     : []
+  const toggleRelated = () => setRelatedOpen(!showRelated)
 
-  const renderCard = (item: Product, suggestion = false) => {
-    const itemInCart = items.find((entry) => entry.productId === item.id)
-    return (
+  return (
+    <article className="product-card-group">
       <InteractiveProductCard
-        key={item.id}
         className={suggestion ? 'interactive-product-card--suggestion' : undefined}
-        imageUrl={item.imageUrl}
-        title={item.name}
-        description={item.composition}
-        price={formatMrp(item.mrp)}
+        imageUrl={product.imageUrl}
+        title={product.name}
+        description={product.composition}
+        price={formatMrp(product.mrp)}
         role="group"
-        aria-label={item.name}
-        titleContent={<Link to={`/catalogue/${item.id}`}>{item.name}</Link>}
-        media={<Link to={`/catalogue/${item.id}`}><ProductImage key={item.imageUrl} src={item.imageUrl} alt={item.name} /></Link>}
+        aria-label={product.name}
+        onClick={(event) => {
+          if ((event.target as Element).closest('a, button, input, select, textarea')) return
+          toggleRelated()
+        }}
+        titleContent={<button type="button" className="interactive-product-card__title-button" aria-expanded={showRelated} aria-controls={showRelated ? relatedId : undefined} onClick={toggleRelated}>{product.name}</button>}
+        media={<button type="button" className="interactive-product-card__image-button" aria-label={(showRelated ? 'Hide' : 'Show') + ' similar products for ' + product.name} aria-expanded={showRelated} aria-controls={showRelated ? relatedId : undefined} onClick={toggleRelated}><ProductImage key={product.imageUrl} productId={product.id} src={product.imageUrl} alt={product.name} /></button>}
         badge={
-          <span className={`interactive-product-card__stock ${item.available ? 'is-available' : 'is-unavailable'}`}
-            title={item.available ? 'Available' : 'Unavailable'} aria-label={item.available ? 'Available' : 'Unavailable'}>
-            <PackageCheck size={12} aria-hidden="true" />{item.available ? 'Stock' : 'Hold'}
+          <span className={`interactive-product-card__stock ${product.available ? 'is-available' : 'is-unavailable'}`}
+            title={product.available ? 'Available' : 'Unavailable'} aria-label={product.available ? 'Available' : 'Unavailable'}>
+            <PackageCheck size={12} aria-hidden="true" />{product.available ? 'Stock' : 'Hold'}
           </span>
         }
-        metadata={<><span>{item.company}</span><span>{item.packing}</span></>}
-        actions={itemInCart ? (
-          <QuantitySelector value={itemInCart.quantity} allowZero onChange={(quantity) => updateQuantity(item.id, quantity)} />
+        metadata={<><span>{product.company}</span><span>{product.packing}</span><Link className="interactive-product-card__details-link" to={`/catalogue/${product.id}`}>Details</Link></>}
+        actions={cartItem ? (
+          <QuantitySelector value={cartItem.quantity} allowZero onChange={(quantity) => updateQuantity(product.id, quantity)} />
         ) : (
-          <button className="button primary compact-add" type="button" disabled={!item.available}
-            aria-label={`Add ${item.name} to cart`} onClick={() => addProduct(item, 1)}>
+          <button className="button primary compact-add" type="button" disabled={!product.available}
+            aria-label={`Add ${product.name} to cart`} onClick={() => { addProduct(product, 1); setRelatedOpen(true) }}>
             <ShoppingCart size={17} aria-hidden="true" />Add
           </button>
         )}
       />
-    )
-  }
-
-  return (
-    <article className="product-card-group">
-      {renderCard(product)}
-      {relatedProducts.length > 0 && (
-        <section className="product-card-suggestions" aria-label={`Similar ${product.composition} products`}>
+      {showRelated && (
+        <section id={relatedId} className="product-card-suggestions" aria-label={`Similar products for ${product.name}`}>
           <p className="product-card-suggestions__heading"><Sparkles size={14} aria-hidden="true" />Similar products</p>
-          <div className="product-card-suggestions__list">
-            {relatedProducts.map((item) => renderCard(item, true))}
-          </div>
+          {relatedProducts.length ? <div className="product-card-suggestions__list">
+            {relatedProducts.map((item) => <ProductCard key={item.id} product={item} suggestion ancestorIds={[...ancestorIds, product.id]} />)}
+          </div> : <p className="product-card-suggestions__empty">No similar products available.</p>}
         </section>
       )}
     </article>

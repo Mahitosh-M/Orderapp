@@ -1,3 +1,4 @@
+import { CategoryImages } from './pages/admin/CategoryImages'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CustomerLayout } from './components/layout/CustomerLayout'
 import { Catalogue } from './pages/Catalogue'
@@ -21,6 +22,8 @@ export function App() {
 
   return (
     <Routes>
+      <Route path="/admin" element={<CategoryImages />} />
+      <Route path="/admin/category-images" element={<CategoryImages />} />
       <Route element={<CustomerLayout />}>
         {isStaff ? (
           <>

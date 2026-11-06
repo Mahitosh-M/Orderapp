@@ -23,10 +23,10 @@ function DeliveryIcon({ value }: { value: Order['deliveryPreference'] }) {
   return <Bus size={13} />
 }
 
-export function StaffOrders() {
+export function StaffOrders({ title = 'Staff Orders' }: { title?: string }) {
   const [orders, setOrders] = useState<Order[]>([])
   const [draftItemsByOrder, setDraftItemsByOrder] = useState<Record<string, CartItem[]>>({})
-  const [expandedOrderIds, setExpandedOrderIds] = useState<Set<string>>(() => new Set())
+  const [expandedOrderIds, setExpandedOrderIds] = useState<Set<string>>(() => { const id = new URLSearchParams(window.location.search).get('orderId'); return new Set(id ? [id] : []) })
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -48,6 +48,11 @@ export function StaffOrders() {
   useEffect(() => {
     void loadOrders()
   }, [])
+
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('orderId')
+    if (id && !loading) document.getElementById('staff-order-' + id)?.scrollIntoView?.({ block: 'start' })
+  }, [loading])
 
   const totalPending = useMemo(() => orders.filter((order) => order.status === 'pending').length, [orders])
 
@@ -105,7 +110,7 @@ export function StaffOrders() {
     <section className="page-stack">
       <div className="page-title-row catalogue-title-row">
         <div>
-          <h1>Staff Orders</h1>
+          <h1>{title}</h1>
           <p>{totalPending} pending</p>
         </div>
       </div>
@@ -117,6 +122,7 @@ export function StaffOrders() {
             <article
               className={`order-card staff-order-card ${isExpanded ? 'expanded' : ''}`}
               key={order.id}
+              id={'staff-order-' + order.id}
               onClick={() => toggleOrder(order.id)}
             >
               <div className="page-title-row">

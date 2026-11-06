@@ -1,3 +1,4 @@
+import { loadManagedCategoryImages } from './categoryAdminService'
 import { collection, getDocs } from 'firebase/firestore'
 import { getFirebaseServices } from './firebase'
 
@@ -30,7 +31,7 @@ export function normalizeCategoryImageUrl(value: unknown): string | null {
   }
 }
 
-export async function loadCategoryImages() {
+async function loadLegacyCategoryImages() {
   const { db } = getFirebaseServices()
   const snapshot = await getDocs(collection(db, 'categoryImages'))
   const images: CategoryImageMap = {}
@@ -43,4 +44,10 @@ export async function loadCategoryImages() {
   })
 
   return images
+}
+
+export async function loadCategoryImages() {
+  const [legacy, managed] = await Promise.allSettled([loadLegacyCategoryImages(), loadManagedCategoryImages()])
+  return { ...(legacy.status === 'fulfilled' ? legacy.value : {}),
+    ...(managed.status === 'fulfilled' ? managed.value : {}) }
 }

@@ -9,7 +9,7 @@ export function CartItemCard({ item }: { item: CartItem }) {
   const { updateQuantity, removeItem } = useCart()
   return (
     <article className="cart-item">
-      <ProductImage src={item.imageUrl} alt={item.productName} />
+      <ProductImage productId={item.productId} src={item.imageUrl} alt={item.productName} />
       <div>
         <h3>{item.productName}</h3>
         <p>{item.composition}</p>

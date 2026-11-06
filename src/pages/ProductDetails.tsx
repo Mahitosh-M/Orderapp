@@ -19,7 +19,7 @@ export function ProductDetails() {
       <Link className="text-link" to="/catalogue"><ArrowLeft size={17} />Back to catalogue</Link>
       <article className="product-card product-detail-card">
         <div className="product-detail-media">
-          <ProductImage src={product.imageUrl} alt={product.name} />
+          <ProductImage productId={product.id} src={product.imageUrl} alt={product.name} />
         </div>
         <div className="product-copy">
           <div className="product-info">
