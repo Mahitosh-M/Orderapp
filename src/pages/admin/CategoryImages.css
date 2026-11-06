@@ -4,3 +4,19 @@
 .category-admin .category-admin-panel label{color:#f1f5ff;font-weight:600}.category-admin small{color:#c7d2fe}.category-admin .button{color:#fff;background:#253782;border:1px solid #d4af37}.category-admin .button[aria-pressed=true]{color:#fde68a;background:#4c1d95}.category-crop canvas{height:auto;display:block}
 
 .category-admin-current{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.category-admin-current .button{align-self:center}
+
+.category-admin .category-admin-header{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;padding-bottom:16px;border-bottom:1px solid #d4af37}
+.category-admin-header h1{margin:0;text-align:right;font-size:clamp(20px,4vw,28px);line-height:1.2}
+.category-admin .category-admin-logout{color:#0b102d;background:#fde68a;border-color:#d4af37;white-space:nowrap}
+.category-admin-orders .catalogue-title-row p{color:#c7d2fe}
+.category-admin-orders .staff-order-card{background:linear-gradient(135deg,#11185a,#253782);border:2px solid #d4af37;box-shadow:0 10px 24px #0b102d33}
+.category-admin-orders .staff-order-card:hover,.category-admin-orders .staff-order-card:focus-within{border-color:#fde68a}
+.category-admin-orders .staff-order-card h2,.category-admin-orders .staff-order-item strong{color:#fde68a;overflow-wrap:anywhere}
+.category-admin-orders .staff-order-item{background:#0b102d;border-color:#d4af3766}
+.category-admin-orders .staff-order-item>span{min-width:0;overflow-wrap:anywhere}
+.category-admin-orders .staff-order-item input{color:#fff;background:#0b102d;border-color:#d4af37;padding:8px}
+.category-admin-orders .staff-order-actions .button.primary{color:#0b102d;background:#fde68a;border-color:#d4af37}
+.category-admin-orders .staff-order-actions .button.secondary{color:#fff;background:#253782;border-color:#d4af37}
+.category-admin-orders .staff-order-actions .button.danger{color:#fff;background:#9f1239;border-color:#fda4af}
+
+.category-admin{background:#0b102d}
