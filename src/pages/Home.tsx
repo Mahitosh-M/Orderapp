@@ -8,15 +8,7 @@ import { LoadingState } from '../components/common/LoadingState'
 import { ProductList } from '../components/catalogue/ProductList'
 import { useCatalogue } from '../hooks/useCatalogue'
 import { filterAndSortProducts } from '../utils/search'
-
-const categoryArtwork: Record<string, string> = {
-  'allergy & cough & cold': '/category-images/allergy-cough-cold.jpg', antibiotics: '/category-images/antibiotics-category.jpg',
-  'antifungal & skin': '/category-images/antifungal-skin.jpg', 'antispectics & disinfectants': '/category-images/antiseptics-disinfectants.jpg',
-  'e/e drops': '/category-images/eye-ear-drops.jpg', gastrointestinal: '/category-images/gastrointestinal.jpg',
-  'health suppliments': '/category-images/health-suppliments.jpg', 'heart + bp + sugar': '/category-images/heart-bp-sugar.jpg',
-  'iv fluids': '/category-images/iv-fluids.jpg', 'painkillers & fever': '/category-images/painkillers-fever.jpg',
-  respules: '/category-images/respules.jpg', 'steroids / hormone': '/category-images/steroids-hormone.jpg', surgicals: '/category-images/surgicals.jpg',
-}
+import { getCategoryArtwork } from '../utils/categoryArtwork'
 
 type HomeSlide = CoverflowSlide & { category?: string }
 
@@ -33,7 +25,7 @@ export function Home() {
   const slides = useMemo<HomeSlide[]>(() => {
     return catalogue?.categories.map((category) => {
       const count = catalogue.products.filter((product) => product.category === category).length
-      return { category, src: remoteImages[category.trim().toLowerCase()]?.[0] ?? categoryArtwork[category.trim().toLowerCase()] ?? '/category-images/antibiotics-category.jpg', alt: `${category} medicines`, title: category, subtitle: `${count} products available` }
+      return { category, src: remoteImages[category.trim().toLowerCase()]?.[0] ?? getCategoryArtwork(category), alt: `${category} medicines`, title: category, subtitle: `${count} products available` }
     }).filter((slide) => !slide.subtitle.startsWith('0 ')) ?? []
   }, [catalogue, remoteImages])
   const matchingProducts = useMemo(() => {
