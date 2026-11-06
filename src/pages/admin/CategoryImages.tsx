@@ -5,6 +5,7 @@ import { getCategoryAdminServices, loadManagedCategoryImages, logoutCategoryAdmi
 import { acceptAdminHandoff } from '../../services/adminHandoff'
 import { invalidateProductImage } from '../../services/productImageService'
 import { squareCrop } from '../../utils/categoryCrop'
+import { getCategoryArtwork } from '../../utils/categoryArtwork'
 import { removeEdgeWhite } from '../../utils/imageBackground'
 import { StaffOrders } from '../staff/StaffOrders'
 import './CategoryImages.css'
@@ -27,6 +28,7 @@ export function CategoryImages() {
   const isProduct = panel === 'products'
   const selection = isProduct ? productId : category
   const saved = isProduct ? productSaved?.id === productId ? productSaved.url : null : images[category.trim().toLowerCase()]?.[0]
+  const currentImage = isProduct ? saved || product?.imageUrl : saved || getCategoryArtwork(category)
 
   useEffect(() => {
     let cancelled = false, unsubscribe = () => {}
@@ -62,7 +64,7 @@ export function CategoryImages() {
     if (!context || !source) return
     context.clearRect(0, 0, 512, 512)
     if (!isProduct) { context.fillStyle = '#fff'; context.fillRect(0, 0, 512, 512) }
-    if (fit && isProduct) {
+    if (fit) {
       const scale = 512 / Math.max(source.naturalWidth, source.naturalHeight)
       const w = source.naturalWidth * scale, h = source.naturalHeight * scale
       context.drawImage(source, (512 - w) / 2, (512 - h) / 2, w, h)
@@ -78,22 +80,29 @@ export function CategoryImages() {
   }, [source, zoom, x, y, isProduct, fit, removeWhite])
 
   function clearEdit() { fileVersion.current++; setSource(null); setFileLoading(false); setError(''); setMessage('') }
-  async function chooseFile(file?: File) {
+  async function openImage(url: string, fitWhole: boolean, failureMessage: string) {
     const version = ++fileVersion.current
-    setSource(null); setFileLoading(false); setError(''); setMessage('')
+    setSource(null); setFileLoading(true); setError(''); setMessage('')
+    try {
+      const image = new Image()
+      image.crossOrigin = 'anonymous'
+      image.src = url
+      await image.decode()
+      if (version !== fileVersion.current) return
+      if (image.naturalWidth * image.naturalHeight > 40000000) throw new Error('Image too large.')
+      setSource(image); setZoom(1); setX(50); setY(50); setFit(fitWhole)
+    } catch { if (version === fileVersion.current) setError(failureMessage) }
+    finally { if (version === fileVersion.current) setFileLoading(false) }
+  }
+  async function chooseFile(file?: File) {
+    clearEdit()
     if (!file) return
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 10 * 1024 * 1024) {
       setError('Choose a JPG, PNG or WebP image under 10 MB.'); return
     }
-    setFileLoading(true)
     const url = URL.createObjectURL(file)
-    try {
-      const image = new Image(); image.src = url; await image.decode()
-      if (version !== fileVersion.current) return
-      if (image.naturalWidth * image.naturalHeight > 40000000) throw new Error('Image too large.')
-      setSource(image); setZoom(1); setX(50); setY(50); setFit(isProduct)
-    } catch { if (version === fileVersion.current) setError('Unable to open this image. Choose a smaller image.') }
-    finally { URL.revokeObjectURL(url); if (version === fileVersion.current) setFileLoading(false) }
+    try { await openImage(url, isProduct, 'Unable to open this image. Choose a smaller image.') }
+    finally { URL.revokeObjectURL(url) }
   }
   async function save() {
     if (!selection || !source || !canvas.current) return
@@ -148,14 +157,18 @@ export function CategoryImages() {
         </> : <label>Category<select disabled={busy} value={category} onChange={event => { clearEdit(); setCategory(event.target.value) }}>
           <option value="">Select category</option>{catalogue?.categories.map(name => <option key={name} value={name}>{name}</option>)}
         </select></label>}
-        {selection && (saved || (isProduct && product?.imageUrl)) && <div><span>Current image</span><img className="category-admin-saved" src={saved || product?.imageUrl} alt={isProduct ? product?.name : category} /></div>}
+        {selection && currentImage && <div className="category-admin-current"><div><span>Current image</span><img className="category-admin-saved" src={currentImage} alt={isProduct ? product?.name : category} /></div>
+          <button type="button" className="button" disabled={busy || fileLoading} onClick={() => void openImage(currentImage, false, 'Unable to open the current image. Upload the image to crop it instead.')}>Crop current image</button></div>}
         <label>Upload image<input key={panel + selection} type="file" accept="image/jpeg,image/png,image/webp" disabled={!selection || busy} onChange={event => void chooseFile(event.target.files?.[0])} /></label>
         {fileLoading && <p role="status">Opening image…</p>}
         {source && <div className="category-crop">
           <canvas ref={canvas} width={512} height={512} aria-label="Cropped image preview" />
-          {isProduct && <><label className="category-admin-check"><input type="checkbox" checked={fit} disabled={busy} onChange={event => setFit(event.target.checked)} />Fit whole product</label>
-            <label className="category-admin-check"><input type="checkbox" checked={removeWhite} disabled={busy} onChange={event => setRemoveWhite(event.target.checked)} />Remove edge white background</label></>}
-          {(!isProduct || !fit) && <><label>Zoom<input type="range" min="1" max="3" step="0.01" value={zoom} disabled={busy} onChange={event => setZoom(Number(event.target.value))} /></label>
+          <div className="category-admin-actions" role="group" aria-label="Image framing">
+            <button type="button" className="button" aria-pressed={!fit} disabled={busy} onClick={() => setFit(false)}>Crop image</button>
+            <button type="button" className="button" aria-pressed={fit} disabled={busy} onClick={() => setFit(true)}>Fit whole image</button>
+          </div>
+          {isProduct && <label className="category-admin-check"><input type="checkbox" checked={removeWhite} disabled={busy} onChange={event => setRemoveWhite(event.target.checked)} />Remove edge white background</label>}
+          {!fit && <><label>Zoom<input type="range" min="1" max="3" step="0.01" value={zoom} disabled={busy} onChange={event => setZoom(Number(event.target.value))} /></label>
             <label>Horizontal position<input type="range" min="0" max="100" value={x} disabled={busy} onChange={event => setX(Number(event.target.value))} /></label>
             <label>Vertical position<input type="range" min="0" max="100" value={y} disabled={busy} onChange={event => setY(Number(event.target.value))} /></label></>}
         </div>}
