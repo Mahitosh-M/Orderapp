@@ -90,38 +90,45 @@ function createLaunchProfile(name: string, role: LaunchRole, customerId: string,
 
 export function LaunchProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<LaunchSession | null>(() => loadStoredSession())
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const name = (params.get('name') ?? params.get('customerName') ?? params.get('userName'))?.trim()
-    const role = parseLaunchRole(params.get('role'))
-    const customerId = (params.get('customerId') ?? params.get('customerID') ?? params.get('id') ?? name)?.trim()
-    const area = (params.get('area') ?? params.get('customerArea') ?? '')?.trim()
-    const returnUrl = parseReturnUrl(params.get('returnUrl'))
+    try {
+      const params = new URLSearchParams(window.location.search)
+      const name = (params.get('name') ?? params.get('customerName') ?? params.get('userName'))?.trim()
+      const role = parseLaunchRole(params.get('role'))
+      const customerId = (params.get('customerId') ?? params.get('customerID') ?? params.get('id') ?? name)?.trim()
+      const area = (params.get('area') ?? params.get('customerArea') ?? '')?.trim()
+      const returnUrl = parseReturnUrl(params.get('returnUrl'))
 
-    if (!name && !role) return
+      if (!name && !role) return
 
-    if (!name || !role) {
-      setError('Missing name or role launch parameter.')
-      return
+      if (!name || !role) {
+        setError('Missing name or role launch parameter.')
+        return
+      }
+
+      const profile = createLaunchProfile(name, role, customerId || name, area)
+      const nextSession = {
+        uid: customerId || name,
+        customerId: customerId || name,
+        customerName: name,
+        customerArea: area,
+        role,
+        returnUrl,
+        profile,
+      }
+      try {
+        window.sessionStorage.setItem(storageKey, JSON.stringify(nextSession))
+      } catch {
+        // The launch still works for this tab when browser storage is unavailable.
+      }
+      setSession(nextSession)
+      setError(null)
+    } finally {
+      setLoading(false)
     }
-
-    const profile = createLaunchProfile(name, role, customerId || name, area)
-    const nextSession = {
-      uid: customerId || name,
-      customerId: customerId || name,
-      customerName: name,
-      customerArea: area,
-      role,
-      returnUrl,
-      profile,
-    }
-    window.sessionStorage.setItem(storageKey, JSON.stringify(nextSession))
-    setSession(nextSession)
-    setLoading(false)
-    setError(null)
   }, [])
 
   const value = useMemo(
